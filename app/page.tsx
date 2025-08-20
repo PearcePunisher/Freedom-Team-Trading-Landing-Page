@@ -1,8 +1,7 @@
 "use client"
 
-import type React from "react"
+import React, { useState } from "react"
 import Image from "next/image"
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -25,7 +24,7 @@ export default function HomePage() {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // Handle form submission here
     console.log("Form submitted:", formData)
@@ -39,9 +38,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Navigation */}
-      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-border border-b-0">
+  <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24">
+          <div className="flex flex-col md:flex-row items-center justify-between h-24">
             <div className="flex items-center space-x-2">
               <Image
                 src="/FTTHorizontal-thin.webp"
@@ -67,7 +66,7 @@ export default function HomePage() {
               <h1 className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight">
                 Become A Profitable Trader. <span className="text-accent">Under 1 Hour/Day.</span>
               </h1>
-              <p className="text-lg max-w-xl text-white text-white">
+          <p className="text-lg max-w-xl text-white">
                 Learn to trade, master 3 simple trading systems. And become a trader that can trade any market.
               </p>
               <Button
@@ -338,23 +337,38 @@ export default function HomePage() {
       </section>
 
       {/* New CTA Section with Bonus eBook Offer */}
+
       <section className="py-20 bg-card">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-6">
-            Book Your Free Strategy Session
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            And Get a Rare, Insider-Level Bonus eBook Free
-            <br />
-            <span className="text-sm">(access to strategies most traders don't share)</span>
-          </p>
-          <Button
-            onClick={openModal}
-            size="lg"
-            className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-          >
-            Schedule Your Free Strategy Session Now
-          </Button>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 flex-wrap">
+            {/* Image: mobile mockup */}
+            <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center mb-8 md:mb-0">
+              <img
+                src="/phone-background.webp"
+                alt="Options Scanner Blueprint Mobile Mockup"
+                className="w-64 md:w-56 lg:w-64 h-auto"
+                style={{ maxWidth: '100%' }}
+              />
+            </div>
+            {/* Text & CTA */}
+            <div className="flex-1 flex flex-col justify-center text-center md:text-left">
+              <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-6">
+                Book Your Free Strategy Session
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto md:mx-0">
+                And Get a Rare, Insider-Level Bonus eBook Free
+                <br />
+                <span className="text-sm">(access to strategies most traders don't share)</span>
+              </p>
+              <Button
+                onClick={openModal}
+                size="lg"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
+              >
+                Schedule Your Free Strategy Session Now
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
