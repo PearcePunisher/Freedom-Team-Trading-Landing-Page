@@ -1,44 +1,56 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Users, TrendingUp, DollarSign, Clock, Target, BarChart3 } from "lucide-react"
+import React, { useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
+  Clock,
+  Target,
+  BarChart3,
+} from "lucide-react";
 
 export default function HomePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-  })
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     // Handle form submission here
-    console.log("Form submitted:", formData)
-    setIsModalOpen(false)
+    console.log("Form submitted:", formData);
+    setIsModalOpen(false);
     // Reset form
-    setFormData({ firstName: "", lastName: "", email: "" })
-  }
+    setFormData({ firstName: "", lastName: "", email: "" });
+  };
 
-  const openModal = () => setIsModalOpen(true)
+  const openModal = () => setIsModalOpen(true);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Navigation */}
-  <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
+      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between h-24">
             <div className="flex items-center space-x-2">
@@ -51,7 +63,9 @@ export default function HomePage() {
                 priority
               />
             </div>
-            <Button onClick={openModal} className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+            <Button
+              onClick={openModal}
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
               Book Your Free 1-on-1 Strategy Session
             </Button>
           </div>
@@ -64,16 +78,17 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <h1 className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight">
-                Become A Profitable Trader. <span className="text-accent">Under 1 Hour/Day.</span>
+                Become A Profitable Trader.{" "}
+                <span className="text-accent">Under 1 Hour/Day.</span>
               </h1>
-          <p className="text-lg max-w-xl text-white">
-                Learn to trade, master 3 simple trading systems. And become a trader that can trade any market.
+              <p className="text-lg max-w-xl text-white">
+                Learn to trade, master 3 simple trading systems. And become a
+                trader that can trade any market.
               </p>
               <Button
                 onClick={openModal}
                 size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-              >
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
                 Book Your Free 1-on-1 Strategy Session
               </Button>
               <p className="text-sm text-white">No experience needed!</p>
@@ -81,15 +96,19 @@ export default function HomePage() {
 
             <div className="relative">
               <div className="aspect-video bg-card rounded-lg overflow-hidden shadow-2xl">
-                <Image
-                  src="/stock-trading.jpeg"
-                  alt="Master a 3 step trading method to put around a day budget on the best investment."
-                  width={1280}
-                  height={721}
-                  className="w-full h-full object-cover"
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                />
+                {/* Wistia Embed: Responsive 16:9 iframe */}
+                <div
+                  className="relative w-full h-0"
+                  style={{ paddingBottom: "56.25%" }}>
+                  <iframe
+                    src="https://fast.wistia.net/embed/iframe/uggxez8r8s?videoFoam=true"
+                    title="Wistia Video"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                    frameBorder="0"
+                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -100,26 +119,34 @@ export default function HomePage() {
       <section className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">What Sets Us Apart</h2>
+            <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
+              What Sets Us Apart
+            </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <Users className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">1500+ Students</h3>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
+                1500+ Students
+              </h3>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <TrendingUp className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">High Success Rate</h3>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
+                High Success Rate
+              </h3>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <DollarSign className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">Millions in Profits</h3>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
+                Millions in Profits
+              </h3>
             </div>
           </div>
         </div>
@@ -133,9 +160,11 @@ export default function HomePage() {
               What You'll Get With Freedom Team Trading
             </h2>
             <p className="text-lg max-w-3xl mx-auto text-white">
-              Stop guessing. Stop dreaming. In just 5 weeks, you'll learn a step-by-step, step-by-step trading approach
-              that works on your account without losing all your money. Whether you're brand new to trading or have been
-              trading for years, this is the system you need.
+              Stop guessing. Stop dreaming. In just 5 weeks, you'll learn a
+              step-by-step, step-by-step trading approach that works on your
+              account without losing all your money. Whether you're brand new to
+              trading or have been trading for years, this is the system you
+              need.
             </p>
           </div>
 
@@ -146,7 +175,8 @@ export default function HomePage() {
                   <Target className="h-8 w-8 text-accent-foreground" />
                 </div>
                 <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Learn a 3 phase trading system that works in any trading situation
+                  Learn a 3 phase trading system that works in any trading
+                  situation
                 </h3>
               </CardContent>
             </Card>
@@ -157,7 +187,8 @@ export default function HomePage() {
                   <BarChart3 className="h-8 w-8 text-accent-foreground" />
                 </div>
                 <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Use our proven "scale and compound" method to grow your account
+                  Use our proven "scale and compound" method to grow your
+                  account
                 </h3>
               </CardContent>
             </Card>
@@ -189,8 +220,7 @@ export default function HomePage() {
             <Button
               onClick={openModal}
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-            >
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
               Schedule Your Free Strategy Session Now
             </Button>
           </div>
@@ -205,7 +235,8 @@ export default function HomePage() {
               Real Traders, Real Results
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Hear from Freedom Team members who have transformed their trading and their lives.
+              Hear from Freedom Team members who have transformed their trading
+              and their lives.
             </p>
           </div>
 
@@ -226,9 +257,10 @@ export default function HomePage() {
                   Dylan - From Frustrated to Profitable
                 </h3>
                 <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is simple and works. Risk management is key
-                  and I've learned to control my emotions when making trading decisions. I've made so much progress in
-                  my trading."
+                  "I've finally been seeing consistent gains. The strategy is
+                  simple and works. Risk management is key and I've learned to
+                  control my emotions when making trading decisions. I've made
+                  so much progress in my trading."
                 </p>
               </CardContent>
             </Card>
@@ -249,9 +281,10 @@ export default function HomePage() {
                   Dylan - From Frustrated to Profitable
                 </h3>
                 <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is simple and works. Risk management is key
-                  and I've learned to control my emotions when making trading decisions. I've made so much progress in
-                  my trading."
+                  "I've finally been seeing consistent gains. The strategy is
+                  simple and works. Risk management is key and I've learned to
+                  control my emotions when making trading decisions. I've made
+                  so much progress in my trading."
                 </p>
               </CardContent>
             </Card>
@@ -272,9 +305,10 @@ export default function HomePage() {
                   Dylan - From Frustrated to Profitable
                 </h3>
                 <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is simple and works. Risk management is key
-                  and I've learned to control my emotions when making trading decisions. I've made so much progress in
-                  my trading."
+                  "I've finally been seeing consistent gains. The strategy is
+                  simple and works. Risk management is key and I've learned to
+                  control my emotions when making trading decisions. I've made
+                  so much progress in my trading."
                 </p>
               </CardContent>
             </Card>
@@ -286,7 +320,9 @@ export default function HomePage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">Trading Simplified</h2>
+            <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">
+              Trading Simplified
+            </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -299,8 +335,9 @@ export default function HomePage() {
                   Trading. There's a Better Way.
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Forget the complex charts and endless strategies. Our system strips trading down to what works… so you
-                  can focus on winning trades and steady growth.
+                  Forget the complex charts and endless strategies. Our system
+                  strips trading down to what works… so you can focus on winning
+                  trades and steady growth.
                 </p>
               </CardContent>
             </Card>
@@ -314,8 +351,9 @@ export default function HomePage() {
                   Maximize Profits. Every Time.
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Learn exactly when to enter, when to exit, and how to lock in profits using a repeatable process you
-                  can trust. And get on the path to financial freedom.
+                  Learn exactly when to enter, when to exit, and how to lock in
+                  profits using a repeatable process you can trust. And get on
+                  the path to financial freedom.
                 </p>
               </CardContent>
             </Card>
@@ -325,10 +363,13 @@ export default function HomePage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
                   <Target className="h-8 w-8 text-accent-foreground" />
                 </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">A Truly Simple Strategy.</h3>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  A Truly Simple Strategy.
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  From beginner to advanced… our proven approach takes the guesswork out of trading, giving you a
-                  blueprint that works now and for years to come.
+                  From beginner to advanced… our proven approach takes the
+                  guesswork out of trading, giving you a blueprint that works
+                  now and for years to come.
                 </p>
               </CardContent>
             </Card>
@@ -347,7 +388,7 @@ export default function HomePage() {
                 src="/phone-background.webp"
                 alt="Options Scanner Blueprint Mobile Mockup"
                 className="w-64 md:w-56 lg:w-64 h-auto"
-                style={{ maxWidth: '100%' }}
+                style={{ maxWidth: "100%" }}
               />
             </div>
             {/* Text & CTA */}
@@ -358,13 +399,14 @@ export default function HomePage() {
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto md:mx-0">
                 And Get a Rare, Insider-Level Bonus eBook Free
                 <br />
-                <span className="text-sm">(access to strategies most traders don't share)</span>
+                <span className="text-sm">
+                  (access to strategies most traders don't share)
+                </span>
               </p>
               <Button
                 onClick={openModal}
                 size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-              >
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
                 Schedule Your Free Strategy Session Now
               </Button>
             </div>
@@ -379,14 +421,13 @@ export default function HomePage() {
             Ready to Transform Your Trading?
           </h2>
           <p className="text-lg text-accent-foreground/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of successful traders who have mastered our proven 3-step system. Book your free strategy
-            session today.
+            Join thousands of successful traders who have mastered our proven
+            3-step system. Book your free strategy session today.
           </p>
           <Button
             onClick={openModal}
             size="lg"
-            className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4"
-          >
+            className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4">
             Book Your Free 1-on-1 Strategy Session
           </Button>
         </div>
@@ -408,10 +449,14 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center space-x-6 text-sm text-muted-foreground">
-              <a href="/privacy-policy" className="hover:text-card-foreground transition-colors">
+              <a
+                href="/privacy-policy"
+                className="hover:text-card-foreground transition-colors">
                 Privacy Policy
               </a>
-              <a href="/terms-conditions" className="hover:text-card-foreground transition-colors">
+              <a
+                href="/terms-conditions"
+                className="hover:text-card-foreground transition-colors">
                 Terms & Conditions
               </a>
             </div>
@@ -419,7 +464,8 @@ export default function HomePage() {
 
           <div className="mt-8 pt-8 border-t border-border text-center">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Freedom Team Trading. All rights reserved.
+              © {new Date().getFullYear()} Freedom Team Trading. All rights
+              reserved.
             </p>
           </div>
         </div>
@@ -469,12 +515,14 @@ export default function HomePage() {
                 className="w-full"
               />
             </div>
-            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+            <Button
+              type="submit"
+              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
               Schedule My Free Session
             </Button>
           </form>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
