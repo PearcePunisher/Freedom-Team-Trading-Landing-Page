@@ -48,8 +48,11 @@ export default function HomePage() {
         console.error("Failed to submit");
         return;
       }
+      // Optional local cleanup before redirect
       setIsModalOpen(false);
       setFormData({ firstName: "", lastName: "", email: "" });
+      // Redirect to scheduling URL
+      window.location.href = "https://freedomteamtrade.com/3-schedule-page1682423104339?sl=result";
     } catch (err) {
       console.error("Submission error", err);
     }
