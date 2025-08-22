@@ -36,13 +36,23 @@ export default function HomePage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    setIsModalOpen(false);
-    // Reset form
-    setFormData({ firstName: "", lastName: "", email: "" });
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) {
+        console.error("Failed to submit");
+        return;
+      }
+      setIsModalOpen(false);
+      setFormData({ firstName: "", lastName: "", email: "" });
+    } catch (err) {
+      console.error("Submission error", err);
+    }
   };
 
   const openModal = () => setIsModalOpen(true);
@@ -65,7 +75,8 @@ export default function HomePage() {
             </div>
             <Button
               onClick={openModal}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+            >
               Book Your Free 1-on-1 Strategy Session
             </Button>
           </div>
@@ -88,7 +99,8 @@ export default function HomePage() {
               <Button
                 onClick={openModal}
                 size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
+              >
                 Book Your Free 1-on-1 Strategy Session
               </Button>
               <p className="text-sm text-white">No experience needed!</p>
@@ -99,7 +111,8 @@ export default function HomePage() {
                 {/* Wistia Embed: Responsive 16:9 iframe */}
                 <div
                   className="relative w-full h-0"
-                  style={{ paddingBottom: "56.25%" }}>
+                  style={{ paddingBottom: "56.25%" }}
+                >
                   <iframe
                     src="https://fast.wistia.net/embed/iframe/uggxez8r8s?videoFoam=true"
                     title="Wistia Video"
@@ -220,7 +233,8 @@ export default function HomePage() {
             <Button
               onClick={openModal}
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
+            >
               Schedule Your Free Strategy Session Now
             </Button>
           </div>
@@ -406,7 +420,8 @@ export default function HomePage() {
               <Button
                 onClick={openModal}
                 size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
+              >
                 Schedule Your Free Strategy Session Now
               </Button>
             </div>
@@ -427,7 +442,8 @@ export default function HomePage() {
           <Button
             onClick={openModal}
             size="lg"
-            className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4">
+            className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4"
+          >
             Book Your Free 1-on-1 Strategy Session
           </Button>
         </div>
@@ -451,12 +467,14 @@ export default function HomePage() {
             <div className="flex items-center space-x-6 text-sm text-muted-foreground">
               <a
                 href="/privacy-policy"
-                className="hover:text-card-foreground transition-colors">
+                className="hover:text-card-foreground transition-colors"
+              >
                 Privacy Policy
               </a>
               <a
                 href="/terms-conditions"
-                className="hover:text-card-foreground transition-colors">
+                className="hover:text-card-foreground transition-colors"
+              >
                 Terms & Conditions
               </a>
             </div>
@@ -517,7 +535,8 @@ export default function HomePage() {
             </div>
             <Button
               type="submit"
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+            >
               Schedule My Free Session
             </Button>
           </form>
