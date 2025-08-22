@@ -28,6 +28,7 @@ export default function HomePage() {
     lastName: "",
     email: "",
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -38,6 +39,8 @@ export default function HomePage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
@@ -46,15 +49,21 @@ export default function HomePage() {
       });
       if (!res.ok) {
         console.error("Failed to submit");
+        setSubmitting(false);
         return;
       }
-      // Optional local cleanup before redirect
+      const data = await res.json();
+      if (!data?.success) {
+        console.error("API did not return success");
+        setSubmitting(false);
+        return;
+      }
       setIsModalOpen(false);
       setFormData({ firstName: "", lastName: "", email: "" });
-      // Redirect to scheduling URL
       window.location.href = "https://freedomteamtrade.com/3-schedule-page1682423104339?sl=result";
     } catch (err) {
       console.error("Submission error", err);
+      setSubmitting(false);
     }
   };
 

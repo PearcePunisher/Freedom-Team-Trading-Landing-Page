@@ -21,11 +21,26 @@ export async function POST(req: NextRequest) {
       created_at TIMESTAMPTZ DEFAULT NOW()
     );`;
 
-    await sql`INSERT INTO leads (first_name, last_name, email)
-              VALUES (${firstName}, ${lastName}, ${email})
-              ON CONFLICT (email) DO NOTHING;`;
+    // Attempt insert and capture if a row was inserted
+    let inserted = false;
+    try {
+      const result: any = await sql`INSERT INTO leads (first_name, last_name, email)
+                              VALUES (${firstName}, ${lastName}, ${email})
+                              ON CONFLICT (email) DO NOTHING
+                              RETURNING id;`;
+      if (Array.isArray(result)) {
+        inserted = result.length > 0;
+      } else if (result && Array.isArray(result[0])) {
+        inserted = result[0].length > 0;
+      } else if (result && typeof result.rowCount === 'number') {
+        inserted = result.rowCount > 0;
+      }
+    } catch (e) {
+      console.error('Insert error', e);
+      return NextResponse.json({ error: 'Insert failed' }, { status: 500 });
+    }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, inserted });
   } catch (err: any) {
     console.error('[leads][POST] error', err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
