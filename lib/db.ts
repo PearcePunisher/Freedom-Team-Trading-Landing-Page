@@ -1,16 +1,14 @@
 import { neon } from '@neondatabase/serverless';
 
-let sql: ReturnType<typeof neon> | null = null;
+let _sql: ReturnType<typeof neon> | null = null;
 
 export function getSql() {
-  if (!sql) {
-    const connectionString = process.env.DATABASE_URL;
+  if (!_sql) {
+    const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL;
     if (!connectionString) {
-      throw new Error('DATABASE_URL env var is missing');
+      throw new Error('No database connection string found. Expected one of: DATABASE_URL, POSTGRES_URL, NEON_DATABASE_URL');
     }
-    sql = neon(connectionString);
+    _sql = neon(connectionString);
   }
-  return sql;
+  return _sql;
 }
-
-export { sql }; // legacy export if already imported elsewhere (will be undefined until getSql called)

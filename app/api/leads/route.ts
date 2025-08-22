@@ -31,3 +31,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+// GET /api/leads?token=DEBUG_TOKEN  (debug only, remove later)
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const token = searchParams.get('token');
+    const expected = process.env.LEADS_DEBUG_TOKEN;
+    if (!expected || token !== expected) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const sql = getSql();
+    const rows = await sql`SELECT id, first_name, last_name, email, created_at FROM leads ORDER BY created_at DESC LIMIT 25;`;
+    return NextResponse.json({ rows });
+  } catch (err: any) {
+    console.error('[leads][GET] error', err);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
