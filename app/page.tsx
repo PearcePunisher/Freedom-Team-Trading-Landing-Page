@@ -271,13 +271,15 @@ export default function HomePage() {
               <CardContent className="p-6">
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <iframe
-                    src="https://www.youtube.com/embed/EngW7tLk6R8"
                     title="Dylan - From Frustrated to Profitable"
-                    className="w-full h-full"
+                    src="https://player.vimeo.com/video/814064049?h=2b29cbe014"
+                    width="100%"
+                    height="100%"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowFullScreen
-                  />
+                  ></iframe>
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
                   Dylan - From Frustrated to Profitable
@@ -295,22 +297,21 @@ export default function HomePage() {
               <CardContent className="p-6">
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <iframe
-                    src="https://www.youtube.com/embed/EngW7tLk6R8"
-                    title="Dylan - From Frustrated to Profitable"
-                    className="w-full h-full"
+                    title="How Will Gained His Time Back With The Freedom Team"
+                    src="https://player.vimeo.com/video/813876327?h=25d5841986"
+                    width="100%"
+                    height="100%"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowFullScreen
-                  />
+                  ></iframe>
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                  Dylan - From Frustrated to Profitable
+                  How Will Gained His Time Back With The Freedom Team
                 </h3>
                 <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is
-                  simple and works. Risk management is key and I've learned to
-                  control my emotions when making trading decisions. I've made
-                  so much progress in my trading."
+                  “When I first started following you… I saw it as every other mentorship or group out there… but you really gave me the time of day to talk to me and that really just spoke to me. All these other mentorships that I had, you don’t get to know the person. Having this smaller community where were all bouncing ideas off each other, you’re a completely open book, I would recommend this to anyone.”
                 </p>
               </CardContent>
             </Card>
@@ -319,22 +320,21 @@ export default function HomePage() {
               <CardContent className="p-6">
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <iframe
-                    src="https://www.youtube.com/embed/EngW7tLk6R8"
-                    title="Dylan - From Frustrated to Profitable"
-                    className="w-full h-full"
+                    title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
+                    src="https://player.vimeo.com/video/813876256?h=77751d044c"
+                    width="100%"
+                    height="100%"
                     frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowFullScreen
-                  />
+                  ></iframe>
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                  Dylan - From Frustrated to Profitable
+                  How Eduardo Went From 4 Blown Accounts to Profitable Trader
                 </h3>
                 <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is
-                  simple and works. Risk management is key and I've learned to
-                  control my emotions when making trading decisions. I've made
-                  so much progress in my trading."
+                   “After taking your course I have more logical stops… so now it’s much more probable for me to make money. Now when I trade, I’m a lot more calm about it…. If you follow through the whole course, you’re gonna make it. “
                 </p>
               </CardContent>
             </Card>
