@@ -30,6 +30,10 @@ export default function HomePage() {
     email: "",
   });
   const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const REDIRECT_URL = "https://freedomteamtrade.com/3-schedule-page1682423104339?sl=result";
+  const REDIRECT_DELAY_MS = 1800; // delay so user sees confirmation
+  const redirectTimeoutRef = React.useRef<number | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -59,16 +63,42 @@ export default function HomePage() {
         setSubmitting(false);
         return;
       }
-      setIsModalOpen(false);
+      setSuccess(true); // show confirmation message
+      // Clear form fields but keep dialog open for confirmation display
       setFormData({ firstName: "", lastName: "", email: "" });
-      window.location.href = "https://freedomteamtrade.com/3-schedule-page1682423104339?sl=result";
+      redirectTimeoutRef.current = window.setTimeout(() => {
+        window.location.href = REDIRECT_URL;
+      }, REDIRECT_DELAY_MS);
     } catch (err) {
       console.error("Submission error", err);
       setSubmitting(false);
     }
   };
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    // Reset any previous success state when reopening
+    if (redirectTimeoutRef.current) {
+      clearTimeout(redirectTimeoutRef.current);
+      redirectTimeoutRef.current = null;
+    }
+    setSuccess(false);
+    setSubmitting(false);
+    setIsModalOpen(true);
+  };
+
+  // If user manually closes dialog after success, still proceed with redirect if not already
+  React.useEffect(() => {
+    if (!isModalOpen && success && redirectTimeoutRef.current === null) {
+      // user closed dialog early; navigate immediately
+      window.location.href = REDIRECT_URL;
+    }
+    return () => {
+      // cleanup on unmount
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+    };
+  }, [isModalOpen, success]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -151,44 +181,38 @@ export default function HomePage() {
       </section>
 
       {/* Trust Metrics */}
-      <section className="py-16 bg-card">
+      <FadeIn as="section" y={40} amount={0.25} className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn amount={0.3} className="text-center mb-12">
+          <div className="text-center mb-12">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
               What Sets Us Apart
             </h2>
-          </FadeIn>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FadeIn delay={0} y={32} className="text-center">
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <Users className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
-                1500+ Students
-              </h3>
-            </FadeIn>
-            <FadeIn delay={0.1} y={32} className="text-center">
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">1500+ Students</h3>
+            </div>
+            <div>
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <TrendingUp className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
-                High Success Rate
-              </h3>
-            </FadeIn>
-            <FadeIn delay={0.2} y={32} className="text-center">
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">High Success Rate</h3>
+            </div>
+            <div>
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <DollarSign className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
-                Millions in Profits
-              </h3>
-            </FadeIn>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">Millions in Profits</h3>
+            </div>
           </div>
         </div>
-      </section>
+      </FadeIn>
 
       {/* What You'll Get Section */}
-      <section className="py-20">
+      <FadeIn as="section" y={40} amount={0.25} className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-4">
@@ -202,61 +226,50 @@ export default function HomePage() {
               need.
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Animated feature cards */}
-            <FadeIn y={40} className="h-full">
-              <Card className="bg-card border-border h-full">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <Target className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    Learn a 3 phase trading system that works in any trading
-                    situation
-                  </h3>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn y={40} delay={0.1} className="h-full">
-              <Card className="bg-card border-border h-full">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <BarChart3 className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    Use our proven "scale and compound" method to grow your
-                    account
-                  </h3>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn y={40} delay={0.2} className="h-full">
-              <Card className="bg-card border-border h-full">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <DollarSign className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    Trade with a "casino-like" statistical edge instead of emotion
-                  </h3>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn y={40} delay={0.3} className="h-full">
-              <Card className="bg-card border-border h-full">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <Clock className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    Spend no more than 1 hour per day in the market
-                  </h3>
-                </CardContent>
-              </Card>
-            </FadeIn>
+            <Card className="bg-card border-border h-full">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <Target className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  Learn a 3 phase trading system that works in any trading
+                  situation
+                </h3>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border h-full">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <BarChart3 className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  Use our proven "scale and compound" method to grow your
+                  account
+                </h3>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border h-full">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <DollarSign className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  Trade with a "casino-like" statistical edge instead of emotion
+                </h3>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border h-full">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <Clock className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  Spend no more than 1 hour per day in the market
+                </h3>
+              </CardContent>
+            </Card>
           </div>
-
           <div className="text-center">
             <Button
               onClick={openModal}
@@ -267,12 +280,12 @@ export default function HomePage() {
             </Button>
           </div>
         </div>
-      </section>
+      </FadeIn>
 
       {/* Real Traders, Real Results */}
-      <section className="py-20 bg-card">
+      <FadeIn as="section" y={40} amount={0.25} className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
+          <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
               Real Traders, Real Results
             </h2>
@@ -280,168 +293,152 @@ export default function HomePage() {
               Hear from Freedom Team members who have transformed their trading
               and their lives.
             </p>
-          </FadeIn>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <FadeIn y={40} className="h-full">
-              <Card className="bg-background border-border h-full">
-                <CardContent className="p-6">
-                  <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                    <iframe
-                      title="Dylan - From Frustrated to Profitable"
-                      src="https://player.vimeo.com/video/814064049?h=2b29cbe014"
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                  <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                    Dylan - From Frustrated to Profitable
-                  </h3>
-                  <p className="text-sm text-white">
-                    "I've finally been seeing consistent gains. The strategy is
-                    simple and works. Risk management is key and I've learned to
-                    control my emotions when making trading decisions. I've made
-                    so much progress in my trading."
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-
-            <FadeIn y={40} delay={0.1} className="h-full">
-              <Card className="bg-background border-border h-full">
-                <CardContent className="p-6">
-                  <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                    <iframe
-                      title="How Will Gained His Time Back With The Freedom Team"
-                      src="https://player.vimeo.com/video/813876327?h=25d5841986"
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                  <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                    How Will Gained His Time Back With The Freedom Team
-                  </h3>
-                  <p className="text-sm text-white">
-                    “When I first started following you… I saw it as every other
-                    mentorship or group out there… but you really gave me the time
-                    of day to talk to me and that really just spoke to me. All
-                    these other mentorships that I had, you don’t get to know the
-                    person. Having this smaller community where were all bouncing
-                    ideas off each other, you’re a completely open book, I would
-                    recommend this to anyone.”
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-
-            <FadeIn y={40} delay={0.2} className="h-full">
-              <Card className="bg-background border-border h-full">
-                <CardContent className="p-6">
-                  <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                    <iframe
-                      title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
-                      src="https://player.vimeo.com/video/813876256?h=77751d044c"
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                  <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                    How Eduardo Went From 4 Blown Accounts to Profitable Trader
-                  </h3>
-                  <p className="text-sm text-white">
-                    “After taking your course I have more logical stops… so now
-                    it’s much more probable for me to make money. Now when I trade,
-                    I’m a lot more calm about it…. If you follow through the
-                    whole course, you’re gonna make it. “
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
+            <Card className="bg-background border-border h-full">
+              <CardContent className="p-6">
+                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                  <iframe
+                    title="Dylan - From Frustrated to Profitable"
+                    src="https://player.vimeo.com/video/814064049?h=2b29cbe014"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <h3 className="font-serif font-bold text-lg text-foreground mb-2">
+                  Dylan - From Frustrated to Profitable
+                </h3>
+                <p className="text-sm text-white">
+                  "I've finally been seeing consistent gains. The strategy is
+                  simple and works. Risk management is key and I've learned to
+                  control my emotions when making trading decisions. I've made
+                  so much progress in my trading."
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-background border-border h-full">
+              <CardContent className="p-6">
+                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                  <iframe
+                    title="How Will Gained His Time Back With The Freedom Team"
+                    src="https://player.vimeo.com/video/813876327?h=25d5841986"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <h3 className="font-serif font-bold text-lg text-foreground mb-2">
+                  How Will Gained His Time Back With The Freedom Team
+                </h3>
+                <p className="text-sm text-white">
+                  “When I first started following you… I saw it as every other
+                  mentorship or group out there… but you really gave me the time
+                  of day to talk to me and that really just spoke to me. All
+                  these other mentorships that I had, you don’t get to know the
+                  person. Having this smaller community where were all bouncing
+                  ideas off each other, you’re a completely open book, I would
+                  recommend this to anyone.”
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-background border-border h-full">
+              <CardContent className="p-6">
+                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                  <iframe
+                    title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
+                    src="https://player.vimeo.com/video/813876256?h=77751d044c"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <h3 className="font-serif font-bold text-lg text-foreground mb-2">
+                  How Eduardo Went From 4 Blown Accounts to Profitable Trader
+                </h3>
+                <p className="text-sm text-white">
+                  “After taking your course I have more logical stops… so now
+                  it’s much more probable for me to make money. Now when I trade,
+                  I’m a lot more calm about it…. If you follow through the
+                  whole course, you’re gonna make it. “
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </section>
+      </FadeIn>
 
       {/* Trading Simplified */}
-      <section className="py-20">
+      <FadeIn as="section" y={40} amount={0.25} className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
+          <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">
               Trading Simplified
             </h2>
-          </FadeIn>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <FadeIn y={40} className="h-full">
-              <Card className="bg-card border-border">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <BarChart3 className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    Trading. There's a Better Way.
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Forget the complex charts and endless strategies. Our system
-                    strips trading down to what works… so you can focus on winning
-                    trades and steady growth.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn y={40} delay={0.1} className="h-full">
-              <Card className="bg-card border-border">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <TrendingUp className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    Maximize Profits. Every Time.
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Learn exactly when to enter, when to exit, and how to lock in
-                    profits using a repeatable process you can trust. And get on
-                    the path to financial freedom.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-            <FadeIn y={40} delay={0.2} className="h-full">
-              <Card className="bg-card border-border">
-                <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                    <Target className="h-8 w-8 text-accent-foreground" />
-                  </div>
-                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                    A Truly Simple Strategy.
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    From beginner to advanced… our proven approach takes the
-                    guesswork out of trading, giving you a blueprint that works
-                    now and for years to come.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
+            <Card className="bg-card border-border">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <BarChart3 className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  Trading. There's a Better Way.
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Forget the complex charts and endless strategies. Our system
+                  strips trading down to what works… so you can focus on winning
+                  trades and steady growth.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <TrendingUp className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  Maximize Profits. Every Time.
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Learn exactly when to enter, when to exit, and how to lock in
+                  profits using a repeatable process you can trust. And get on
+                  the path to financial freedom.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border">
+              <CardContent className="p-8 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                  <Target className="h-8 w-8 text-accent-foreground" />
+                </div>
+                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                  A Truly Simple Strategy.
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  From beginner to advanced… our proven approach takes the
+                  guesswork out of trading, giving you a blueprint that works
+                  now and for years to come.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </section>
+      </FadeIn>
 
       {/* New CTA Section with Bonus eBook Offer */}
-
-      <section className="py-20 bg-card">
+      <FadeIn as="section" y={40} amount={0.25} className="py-20 bg-card">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 flex-wrap">
-            {/* Image: mobile mockup */}
             <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center mb-8 md:mb-0">
               <img
                 src="/phone-background.webp"
@@ -450,7 +447,6 @@ export default function HomePage() {
                 style={{ maxWidth: "100%" }}
               />
             </div>
-            {/* Text & CTA */}
             <div className="flex-1 flex flex-col justify-center text-center md:text-left">
               <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-6">
                 Book Your Free Strategy Session
@@ -474,7 +470,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </FadeIn>
 
       {/* Final CTA */}
       <section className="py-20 bg-accent">
@@ -538,55 +534,79 @@ export default function HomePage() {
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-serif font-bold text-center">
-              Book Your Free Strategy Session
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                name="firstName"
-                type="text"
-                required
-                value={formData.firstName}
-                onChange={handleInputChange}
-                className="w-full"
-              />
+          {!success && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-serif font-bold text-center">
+                  Book Your Free Strategy Session
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    required
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className="w-full"
+                    disabled={submitting}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    required
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className="w-full"
+                    disabled={submitting}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full"
+                    disabled={submitting}
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+                >
+                  {submitting ? 'Submitting...' : 'Schedule My Free Session'}
+                </Button>
+              </form>
+            </>
+          )}
+          {success && (
+            <div className="flex flex-col items-center text-center space-y-6 py-4" aria-live="assertive">
+              <div className="space-y-2">
+                <h3 className="text-xl font-serif font-bold text-foreground">Thank you!</h3>
+                <p className="text-sm text-muted-foreground max-w-sm">
+                  The next page is where you'll book your 1-on-1 session with us. Redirecting now...
+                </p>
+              </div>
+              <Button
+                onClick={() => (window.location.href = REDIRECT_URL)}
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+              >
+                Continue Now
+              </Button>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                name="lastName"
-                type="text"
-                required
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="w-full"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-            >
-              Schedule My Free Session
-            </Button>
-          </form>
+          )}
         </DialogContent>
       </Dialog>
     </div>
