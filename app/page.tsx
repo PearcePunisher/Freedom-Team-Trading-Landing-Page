@@ -153,36 +153,36 @@ export default function HomePage() {
       {/* Trust Metrics */}
       <section className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <FadeIn amount={0.3} className="text-center mb-12">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
               What Sets Us Apart
             </h2>
-          </div>
+          </FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
+            <FadeIn delay={0} y={32} className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <Users className="h-8 w-8 text-accent-foreground" />
               </div>
               <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
                 1500+ Students
               </h3>
-            </div>
-            <div className="text-center">
+            </FadeIn>
+            <FadeIn delay={0.1} y={32} className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <TrendingUp className="h-8 w-8 text-accent-foreground" />
               </div>
               <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
                 High Success Rate
               </h3>
-            </div>
-            <div className="text-center">
+            </FadeIn>
+            <FadeIn delay={0.2} y={32} className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <DollarSign className="h-8 w-8 text-accent-foreground" />
               </div>
               <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
                 Millions in Profits
               </h3>
-            </div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -272,7 +272,7 @@ export default function HomePage() {
       {/* Real Traders, Real Results */}
       <section className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <FadeIn className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
               Real Traders, Real Results
             </h2>
@@ -280,80 +280,94 @@ export default function HomePage() {
               Hear from Freedom Team members who have transformed their trading
               and their lives.
             </p>
-          </div>
-
+          </FadeIn>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-background border-border">
-              <CardContent className="p-6">
-                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                  <iframe
-                    title="Dylan - From Frustrated to Profitable"
-                    src="https://player.vimeo.com/video/814064049?h=2b29cbe014"
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                  Dylan - From Frustrated to Profitable
-                </h3>
-                <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is
-                  simple and works. Risk management is key and I've learned to
-                  control my emotions when making trading decisions. I've made
-                  so much progress in my trading."
-                </p>
-              </CardContent>
-            </Card>
+            <FadeIn y={40} className="h-full">
+              <Card className="bg-background border-border h-full">
+                <CardContent className="p-6">
+                  <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                    <iframe
+                      title="Dylan - From Frustrated to Profitable"
+                      src="https://player.vimeo.com/video/814064049?h=2b29cbe014"
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-foreground mb-2">
+                    Dylan - From Frustrated to Profitable
+                  </h3>
+                  <p className="text-sm text-white">
+                    "I've finally been seeing consistent gains. The strategy is
+                    simple and works. Risk management is key and I've learned to
+                    control my emotions when making trading decisions. I've made
+                    so much progress in my trading."
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
 
-            <Card className="bg-background border-border">
-              <CardContent className="p-6">
-                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                  <iframe
-                    title="How Will Gained His Time Back With The Freedom Team"
-                    src="https://player.vimeo.com/video/813876327?h=25d5841986"
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                  How Will Gained His Time Back With The Freedom Team
-                </h3>
-                <p className="text-sm text-white">
-                  “When I first started following you… I saw it as every other mentorship or group out there… but you really gave me the time of day to talk to me and that really just spoke to me. All these other mentorships that I had, you don’t get to know the person. Having this smaller community where were all bouncing ideas off each other, you’re a completely open book, I would recommend this to anyone.”
-                </p>
-              </CardContent>
-            </Card>
+            <FadeIn y={40} delay={0.1} className="h-full">
+              <Card className="bg-background border-border h-full">
+                <CardContent className="p-6">
+                  <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                    <iframe
+                      title="How Will Gained His Time Back With The Freedom Team"
+                      src="https://player.vimeo.com/video/813876327?h=25d5841986"
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-foreground mb-2">
+                    How Will Gained His Time Back With The Freedom Team
+                  </h3>
+                  <p className="text-sm text-white">
+                    “When I first started following you… I saw it as every other
+                    mentorship or group out there… but you really gave me the time
+                    of day to talk to me and that really just spoke to me. All
+                    these other mentorships that I had, you don’t get to know the
+                    person. Having this smaller community where were all bouncing
+                    ideas off each other, you’re a completely open book, I would
+                    recommend this to anyone.”
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
 
-            <Card className="bg-background border-border">
-              <CardContent className="p-6">
-                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                  <iframe
-                    title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
-                    src="https://player.vimeo.com/video/813876256?h=77751d044c"
-                    width="100%"
-                    height="100%"
-                    frameBorder="0"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <h3 className="font-serif font-bold text-lg text-foreground mb-2">
-                  How Eduardo Went From 4 Blown Accounts to Profitable Trader
-                </h3>
-                <p className="text-sm text-white">
-                  “After taking your course I have more logical stops… so now it’s much more probable for me to make money. Now when I trade, I’m a lot more calm about it…. If you follow through the whole course, you’re gonna make it. “
-                </p>
-              </CardContent>
-            </Card>
+            <FadeIn y={40} delay={0.2} className="h-full">
+              <Card className="bg-background border-border h-full">
+                <CardContent className="p-6">
+                  <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
+                    <iframe
+                      title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
+                      src="https://player.vimeo.com/video/813876256?h=77751d044c"
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-foreground mb-2">
+                    How Eduardo Went From 4 Blown Accounts to Profitable Trader
+                  </h3>
+                  <p className="text-sm text-white">
+                    “After taking your course I have more logical stops… so now
+                    it’s much more probable for me to make money. Now when I trade,
+                    I’m a lot more calm about it…. If you follow through the
+                    whole course, you’re gonna make it. “
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -361,60 +375,63 @@ export default function HomePage() {
       {/* Trading Simplified */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <FadeIn className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">
               Trading Simplified
             </h2>
-          </div>
-
+          </FadeIn>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <BarChart3 className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Trading. There's a Better Way.
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Forget the complex charts and endless strategies. Our system
-                  strips trading down to what works… so you can focus on winning
-                  trades and steady growth.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <TrendingUp className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Maximize Profits. Every Time.
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Learn exactly when to enter, when to exit, and how to lock in
-                  profits using a repeatable process you can trust. And get on
-                  the path to financial freedom.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <Target className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  A Truly Simple Strategy.
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  From beginner to advanced… our proven approach takes the
-                  guesswork out of trading, giving you a blueprint that works
-                  now and for years to come.
-                </p>
-              </CardContent>
-            </Card>
+            <FadeIn y={40} className="h-full">
+              <Card className="bg-card border-border">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <BarChart3 className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    Trading. There's a Better Way.
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Forget the complex charts and endless strategies. Our system
+                    strips trading down to what works… so you can focus on winning
+                    trades and steady growth.
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn y={40} delay={0.1} className="h-full">
+              <Card className="bg-card border-border">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <TrendingUp className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    Maximize Profits. Every Time.
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Learn exactly when to enter, when to exit, and how to lock in
+                    profits using a repeatable process you can trust. And get on
+                    the path to financial freedom.
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn y={40} delay={0.2} className="h-full">
+              <Card className="bg-card border-border">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <Target className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    A Truly Simple Strategy.
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    From beginner to advanced… our proven approach takes the
+                    guesswork out of trading, giving you a blueprint that works
+                    now and for years to come.
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -461,7 +478,7 @@ export default function HomePage() {
 
       {/* Final CTA */}
       <section className="py-20 bg-accent">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <FadeIn className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-serif font-black text-3xl sm:text-4xl text-accent-foreground mb-6">
             Ready to Transform Your Trading?
           </h2>
@@ -476,7 +493,7 @@ export default function HomePage() {
           >
             Book Your Free 1-on-1 Strategy Session
           </Button>
-        </div>
+        </FadeIn>
       </section>
 
       {/* Footer */}

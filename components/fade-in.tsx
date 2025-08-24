@@ -7,6 +7,7 @@ interface FadeInProps extends React.ComponentPropsWithoutRef<'div'> {
   duration?: number; // seconds
   y?: number; // initial translateY in px
   once?: boolean;
+  amount?: number; // intersection threshold (0-1)
 }
 
 // A lightweight intersection-observer powered fade+slide in wrapper.
@@ -17,6 +18,7 @@ export function FadeIn({
   duration = 0.6,
   y = 24,
   once = true,
+  amount = 0.25,
   style,
   className = "",
   children,
@@ -46,15 +48,16 @@ export function FadeIn({
           }
         });
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.2 }
+      { rootMargin: "0px 0px -5% 0px", threshold: amount }
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, [once]);
+  }, [once, amount]);
 
   const base: React.CSSProperties = {
     opacity: 0,
     transform: `translateY(${y}px)`,
+    willChange: 'opacity, transform'
   };
   const shown: React.CSSProperties = visible
     ? { opacity: 1, transform: "translateY(0)" }
