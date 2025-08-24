@@ -20,6 +20,7 @@ import {
   Target,
   BarChart3,
 } from "lucide-react";
+import { FadeIn } from "@/components/fade-in";
 
 export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,22 +101,31 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <h1 className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight">
+              <FadeIn
+                as="h1"
+                y={32}
+                duration={0.8}
+                className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight"
+              >
                 Become A Profitable Trader.{" "}
                 <span className="text-accent">Under 1 Hour/Day.</span>
-              </h1>
-              <p className="text-lg max-w-xl text-white">
+              </FadeIn>
+              <FadeIn delay={0.15} className="text-lg max-w-xl text-white">
                 Learn to trade, master 3 simple trading systems. And become a
                 trader that can trade any market.
-              </p>
-              <Button
-                onClick={openModal}
-                size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-              >
-                Book Your Free 1-on-1 Strategy Session
-              </Button>
-              <p className="text-sm text-white">No experience needed!</p>
+              </FadeIn>
+              <FadeIn delay={0.3}>
+                <Button
+                  onClick={openModal}
+                  size="lg"
+                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
+                >
+                  Book Your Free 1-on-1 Strategy Session
+                </Button>
+              </FadeIn>
+              <FadeIn delay={0.45} className="text-sm text-white">
+                No experience needed!
+              </FadeIn>
             </div>
 
             <div className="relative">
@@ -194,58 +204,64 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <Target className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Learn a 3 phase trading system that works in any trading
-                  situation
-                </h3>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <BarChart3 className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Use our proven "scale and compound" method to grow your
-                  account
-                </h3>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <DollarSign className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Trade with a "casino-like" statistical edge instead of emotion
-                </h3>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border-border">
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
-                  <Clock className="h-8 w-8 text-accent-foreground" />
-                </div>
-                <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Spend no more than 1 hour per day in the market
-                </h3>
-              </CardContent>
-            </Card>
+            {/* Animated feature cards */}
+            <FadeIn y={40} className="h-full">
+              <Card className="bg-card border-border h-full">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <Target className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    Learn a 3 phase trading system that works in any trading
+                    situation
+                  </h3>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn y={40} delay={0.1} className="h-full">
+              <Card className="bg-card border-border h-full">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <BarChart3 className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    Use our proven "scale and compound" method to grow your
+                    account
+                  </h3>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn y={40} delay={0.2} className="h-full">
+              <Card className="bg-card border-border h-full">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <DollarSign className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    Trade with a "casino-like" statistical edge instead of emotion
+                  </h3>
+                </CardContent>
+              </Card>
+            </FadeIn>
+            <FadeIn y={40} delay={0.3} className="h-full">
+              <Card className="bg-card border-border h-full">
+                <CardContent className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-6">
+                    <Clock className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
+                    Spend no more than 1 hour per day in the market
+                  </h3>
+                </CardContent>
+              </Card>
+            </FadeIn>
           </div>
 
           <div className="text-center">
             <Button
               onClick={openModal}
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
+              className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug"
             >
               Schedule Your Free Strategy Session Now
             </Button>
@@ -334,7 +350,7 @@ export default function HomePage() {
                   How Eduardo Went From 4 Blown Accounts to Profitable Trader
                 </h3>
                 <p className="text-sm text-white">
-                   “After taking your course I have more logical stops… so now it’s much more probable for me to make money. Now when I trade, I’m a lot more calm about it…. If you follow through the whole course, you’re gonna make it. “
+                  “After taking your course I have more logical stops… so now it’s much more probable for me to make money. Now when I trade, I’m a lot more calm about it…. If you follow through the whole course, you’re gonna make it. “
                 </p>
               </CardContent>
             </Card>
@@ -429,13 +445,15 @@ export default function HomePage() {
                   (access to strategies most traders don't share)
                 </span>
               </p>
-              <Button
-                onClick={openModal}
-                size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-              >
-                Schedule Your Free Strategy Session Now
-              </Button>
+              <div className="w-full flex justify-center md:justify-start">
+                <Button
+                  onClick={openModal}
+                  size="lg"
+                  className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug"
+                >
+                  Schedule Your Free Strategy Session Now
+                </Button>
+              </div>
             </div>
           </div>
         </div>
