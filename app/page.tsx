@@ -166,11 +166,10 @@ export default function HomePage() {
                   style={{ paddingBottom: "56.25%" }}
                 >
                   <iframe
-                    src="https://fast.wistia.net/embed/iframe/uggxez8r8s?videoFoam=true"
+                    src="https://fast.wistia.net/embed/iframe/uggxez8r8s?videoFoam=true&dnt=true"
                     title="Wistia Video"
                     allow="autoplay; fullscreen"
-                    allowFullScreen
-                    frameBorder="0"
+                    loading="lazy"
                     className="absolute top-0 left-0 w-full h-full rounded-lg"
                   />
                 </div>
@@ -300,13 +299,13 @@ export default function HomePage() {
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <iframe
                     title="Dylan - From Frustrated to Profitable"
-                    src="https://player.vimeo.com/video/814064049?h=2b29cbe014"
+                    src="https://player.vimeo.com/video/814064049?h=2b29cbe014&dnt=1"
                     width="100%"
                     height="100%"
                     frameBorder="0"
                     referrerPolicy="strict-origin-when-cross-origin"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
+                    loading="lazy"
                   ></iframe>
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
@@ -325,13 +324,13 @@ export default function HomePage() {
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <iframe
                     title="How Will Gained His Time Back With The Freedom Team"
-                    src="https://player.vimeo.com/video/813876327?h=25d5841986"
+                    src="https://player.vimeo.com/video/813876327?h=25d5841986&dnt=1"
                     width="100%"
                     height="100%"
                     frameBorder="0"
                     referrerPolicy="strict-origin-when-cross-origin"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
+                    loading="lazy"
                   ></iframe>
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
@@ -353,13 +352,13 @@ export default function HomePage() {
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <iframe
                     title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
-                    src="https://player.vimeo.com/video/813876256?h=77751d044c"
+                    src="https://player.vimeo.com/video/813876256?h=77751d044c&dnt=1"
                     width="100%"
                     height="100%"
                     frameBorder="0"
                     referrerPolicy="strict-origin-when-cross-origin"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                    allowFullScreen
+                    loading="lazy"
                   ></iframe>
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
