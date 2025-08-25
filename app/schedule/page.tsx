@@ -86,6 +86,25 @@ export default function SchedulePage() {
             className="font-serif font-black text-4xl md:text-5xl text-foreground leading-tight text-center">
             Schedule your call below!
           </FadeIn>
+          <FadeIn
+            as="p"
+            delay={0.15}
+            y={16}
+            duration={0.5}
+            amount={0.1}
+            enterViewportOffset={0}
+            className="mt-4 text-center text-sm md:text-base text-white">
+            Page not loading?{' '}
+            <a
+              href="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline font-semibold underline"
+            >
+              Click Here
+            </a>
+          </FadeIn>
+          
         </div>
         <div className="w-full">
           {/* We give the iframe a generous min-height so it pushes the footer down; adjust as needed */}
