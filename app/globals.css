@@ -154,6 +154,12 @@
     cursor: pointer;
   }
 }
+/* Accessibility: ensure sufficient contrast on green accent buttons by forcing black text */
+button.bg-accent, button.bg-accent:focus, button.bg-accent:hover, button.bg-accent:active {
+  color: #000 !important;
+}
+/* If Button uses data attributes or role applied with div/span (asChild patterns), broaden selector */
+[role="button"].bg-accent { color:#000 !important; }
 
 /* CSS animations for staggered reveals */
 @keyframes fadeInUp {
