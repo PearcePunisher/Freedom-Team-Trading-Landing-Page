@@ -135,16 +135,18 @@ export default function HomePage() {
                 as="h1"
                 y={32}
                 duration={0.8}
+                amount={0.1}
+                enterViewportOffset={0}
                 className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight"
               >
                 Become A Profitable Trader.{" "}
                 <span className="text-accent">Under 1 Hour/Day.</span>
               </FadeIn>
-              <FadeIn delay={0.15} className="text-lg max-w-xl text-white">
+              <FadeIn delay={0.2} amount={0.1} enterViewportOffset={0} className="text-lg max-w-xl text-white">
                 Learn to trade, master 3 simple trading systems. And become a
                 trader that can trade any market.
               </FadeIn>
-              <FadeIn delay={0.3}>
+              <FadeIn delay={0.4} amount={0.1} enterViewportOffset={0}>
                 <Button
                   onClick={openModal}
                   size="lg"
@@ -153,7 +155,7 @@ export default function HomePage() {
                   Book Your Free 1-on-1 Strategy Session
                 </Button>
               </FadeIn>
-              <FadeIn delay={0.45} className="text-sm text-white">
+              <FadeIn delay={0.6} amount={0.1} enterViewportOffset={0} className="text-sm text-white">
                 No experience needed!
               </FadeIn>
             </div>
@@ -180,7 +182,7 @@ export default function HomePage() {
       </section>
 
       {/* Trust Metrics */}
-      <FadeIn as="section" y={40} amount={0.25} className="py-16 bg-card">
+      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.7} className="py-16 bg-card" data-fade-id="trust-metrics">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
@@ -211,7 +213,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* What You'll Get Section */}
-      <FadeIn as="section" y={40} amount={0.25} className="py-20">
+      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.75} className="py-20" data-fade-id="what-you-get">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-4">
@@ -282,7 +284,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* Real Traders, Real Results */}
-      <FadeIn as="section" y={40} amount={0.25} className="py-20 bg-card">
+      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.8} className="py-20 bg-card" data-fade-id="real-traders">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
@@ -377,7 +379,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* Trading Simplified */}
-      <FadeIn as="section" y={40} amount={0.25} className="py-20">
+      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.8} className="py-20" data-fade-id="trading-simplified">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">
@@ -435,7 +437,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* New CTA Section with Bonus eBook Offer */}
-      <FadeIn as="section" y={40} amount={0.25} className="py-20 bg-card">
+      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.85} className="py-20 bg-card" data-fade-id="cta-section">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 flex-wrap">
             <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center mb-8 md:mb-0">

@@ -154,3 +154,24 @@
     cursor: pointer;
   }
 }
+
+/* CSS animations for staggered reveals */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Restored glassy blue nav styling */
+.nav-bar {
+  background: linear-gradient(90deg,#072146 0%,#0A2542 50%,#072146 100%);
+  background-color: #072146;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}

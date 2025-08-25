@@ -33,62 +33,63 @@ export function FadeIn({
   const Comp: any = as;
   const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
+  const [hasTriggered, setHasTriggered] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) { setVisible(true); return; }
+    if (reduce) { 
+      setVisible(true); 
+      return; 
+    }
     const el = ref.current as HTMLElement | null;
     if (!el) return;
-
-    let hasIntersected = false;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!ref.current) return;
-        if (visible && once) return; // already done
-        const ratio = entry.intersectionRatio;
-        const rect = entry.boundingClientRect;
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        // Additional guard: only trigger when element top is within bottom (1 - enterViewportOffset) of viewport
-        const topWithin = rect.top <= vh * (1 - enterViewportOffset);
-        if (entry.isIntersecting && ratio >= amount && topWithin) {
-          if (!visible) {
-            if (debug) console.log('[FadeIn] show', { ratio, top: rect.top, id: el.dataset?.fadeId });
-            setVisible(true);
-          }
-          if (once) {
-            hasIntersected = true;
-            observer.unobserve(entry.target);
-          }
-        } else if (!once && !entry.isIntersecting && hasIntersected) {
-          // Allow repeating if once = false
-          setVisible(false);
-        }
-      });
-    }, {
-      root: null,
-      rootMargin,
-      threshold: [0, amount * 0.5, amount, amount + (1 - amount) / 2, 1]
-    });
-
-    observer.observe(el);
-    // Fallback timeout: if IO never fires (e.g., display:none turned to block later), force re-check
-    const fallback = window.setTimeout(() => {
-      if (!visible) {
-        const rect = el.getBoundingClientRect();
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        if (rect.top < vh && rect.bottom > 0) {
-          if (debug) console.log('[FadeIn] fallback show', { rect });
-          setVisible(true);
-        }
-      }
-    }, 3000);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(fallback);
+    
+    const checkVisibility = () => {
+      if (hasTriggered && once) return false;
+      
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      
+      // Element must be at least partially visible
+      const isVisible = rect.bottom > 0 && rect.top < vh;
+      
+      // Calculate how much of the element is visible
+      const visibleHeight = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+      const elementHeight = rect.height;
+      const visibilityRatio = elementHeight > 0 ? visibleHeight / elementHeight : 0;
+      
+      // Check if element top has crossed the trigger point
+      const triggerPoint = vh * (1 - enterViewportOffset);
+      const hasPassedTrigger = rect.top <= triggerPoint;
+      
+      const shouldShow = isVisible && visibilityRatio >= amount && hasPassedTrigger;
+      
+      return shouldShow;
     };
-  }, [once, amount, rootMargin, enterViewportOffset, debug, visible]);
+
+    // Use scroll-based detection as primary method
+    const handleScroll = () => {
+      if (hasTriggered && once) return;
+      
+      if (checkVisibility() && !visible) {
+        setVisible(true);
+        setHasTriggered(true);
+      }
+    };
+
+    // Initial check
+    handleScroll();
+    
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   const base: React.CSSProperties = {
     opacity: 0,
