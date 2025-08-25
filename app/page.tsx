@@ -494,13 +494,15 @@ export default function HomePage() {
 
             <div className="flex items-center space-x-6 text-sm text-muted-foreground">
               <a
-                href="/privacy-policy"
+                href="https://freedomteamtrade.com/privacy-policy1722628932740"
+                target="_blank"
                 className="hover:text-card-foreground transition-colors"
               >
                 Privacy Policy
               </a>
               <a
-                href="/terms-conditions"
+                href="https://freedomteamtrade.com/terms-of-service1722632412284"
+                target="_blank"
                 className="hover:text-card-foreground transition-colors"
               >
                 Terms & Conditions
