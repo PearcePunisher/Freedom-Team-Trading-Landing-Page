@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,9 +33,12 @@ export default function HomePage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const REDIRECT_URL = "https://freedomteamtrade.com/3-schedule-page1682423104339?sl=result";
-  const REDIRECT_DELAY_MS = 1800; // delay so user sees confirmation
+  const REDIRECT_URL = "/schedule";
+  const REDIRECT_DELAY_MS = 3000; // 3s delay so user sees confirmation
   const redirectTimeoutRef = React.useRef<number | null>(null);
+  const successAtRef = React.useRef<number | null>(null);
+  const redirectedRef = React.useRef(false);
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -46,6 +50,7 @@ export default function HomePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (submitting) return;
+    console.log('[leads][submit] Starting submission');
     setSubmitting(true);
     try {
       const res = await fetch("/api/leads", {
@@ -53,28 +58,61 @@ export default function HomePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+      console.log('[leads][submit] Response status', res.status);
       if (!res.ok) {
         console.error("Failed to submit");
         setSubmitting(false);
         return;
       }
       const data = await res.json();
+      console.log('[leads][submit] Response JSON', data);
       if (!data?.success) {
         console.error("API did not return success");
         setSubmitting(false);
         return;
       }
-      setSuccess(true); // show confirmation message
-      // Clear form fields but keep dialog open for confirmation display
+      console.log('[leads][submit] Success true, scheduling redirect target', REDIRECT_URL);
+      setSuccess(true);
+      successAtRef.current = Date.now();
+      // Clear form for UX
       setFormData({ firstName: "", lastName: "", email: "" });
-      redirectTimeoutRef.current = window.setTimeout(() => {
-        window.location.href = REDIRECT_URL;
-      }, REDIRECT_DELAY_MS);
+      scheduleRedirect();
     } catch (err) {
       console.error("Submission error", err);
       setSubmitting(false);
     }
   };
+
+  function performRedirect() {
+    if (redirectedRef.current) return;
+    redirectedRef.current = true;
+    console.log('[leads][redirect] Navigating to', REDIRECT_URL);
+    try {
+      router.push(REDIRECT_URL);
+    } catch (e) {
+      console.warn('[leads][redirect] router.push failed, falling back to window.location', e);
+      window.location.href = REDIRECT_URL;
+    }
+  }
+
+  function scheduleRedirect() {
+    if (!successAtRef.current || redirectedRef.current) return;
+    const elapsed = Date.now() - successAtRef.current;
+    const remaining = REDIRECT_DELAY_MS - elapsed;
+    if (remaining <= 0) {
+      console.log('[leads][scheduleRedirect] Remaining <= 0, redirecting now');
+      performRedirect();
+      return;
+    }
+    if (redirectTimeoutRef.current) {
+      clearTimeout(redirectTimeoutRef.current);
+    }
+    console.log('[leads][scheduleRedirect] Scheduling redirect in', remaining, 'ms (elapsed', elapsed, 'ms)');
+    redirectTimeoutRef.current = window.setTimeout(() => {
+      console.log('[leads][redirectTimer] Timer fired after', remaining, 'ms');
+      performRedirect();
+    }, remaining);
+  }
 
   const openModal = () => {
     // Reset any previous success state when reopening
@@ -89,13 +127,18 @@ export default function HomePage() {
 
   // If user manually closes dialog after success, still proceed with redirect if not already
   React.useEffect(() => {
-    if (!isModalOpen && success && redirectTimeoutRef.current === null) {
-      // user closed dialog early; navigate immediately
-      window.location.href = REDIRECT_URL;
+    console.log('[leads][effect][modal|success] isModalOpen:', isModalOpen, 'success:', success, 'timer:', redirectTimeoutRef.current, 'redirected:', redirectedRef.current);
+    if (success) {
+      scheduleRedirect();
+      if (!isModalOpen) {
+        console.log('[leads][effect] Modal closed early, forcing immediate redirect');
+        performRedirect();
+      }
     }
     return () => {
-      // cleanup on unmount
       if (redirectTimeoutRef.current) {
+        // Note: during Fast Refresh this cleanup will run; a subsequent re-mount will reschedule based on timestamp.
+        console.log('[leads][cleanup] Clearing redirect timer id', redirectTimeoutRef.current);
         clearTimeout(redirectTimeoutRef.current);
       }
     };
@@ -121,8 +164,7 @@ export default function HomePage() {
             </div>
             <Button
               onClick={openModal}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-            >
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
               Book Your Free 1-on-1 Strategy Session
             </Button>
           </div>
@@ -140,25 +182,31 @@ export default function HomePage() {
                 duration={0.8}
                 amount={0.1}
                 enterViewportOffset={0}
-                className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight"
-              >
+                className="font-serif font-black text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight">
                 Become A Profitable Trader.{" "}
                 <span className="text-accent">Under 1 Hour/Day.</span>
               </FadeIn>
-              <FadeIn delay={0.2} amount={0.1} enterViewportOffset={0} className="text-lg max-w-xl text-white">
-                Learn to trade, master 3 simple trading systems. And become a
-                trader that can trade any market.
+              <FadeIn
+                delay={0.2}
+                amount={0.1}
+                enterViewportOffset={0}
+                className="text-lg max-w-xl text-white">
+                Learn a simple, proven, 3-phase trading system... And master a
+                better, more profitable way to trade.
               </FadeIn>
               <FadeIn delay={0.4} amount={0.1} enterViewportOffset={0}>
                 <Button
                   onClick={openModal}
                   size="lg"
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4"
-                >
+                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
                   Book Your Free 1-on-1 Strategy Session
                 </Button>
               </FadeIn>
-              <FadeIn delay={0.6} amount={0.1} enterViewportOffset={0} className="text-sm text-white">
+              <FadeIn
+                delay={0.6}
+                amount={0.1}
+                enterViewportOffset={0}
+                className="text-lg text-white">
                 No experience needed!
               </FadeIn>
             </div>
@@ -168,8 +216,7 @@ export default function HomePage() {
                 {/* Wistia Embed: Responsive 16:9 iframe */}
                 <div
                   className="relative w-full h-0"
-                  style={{ paddingBottom: "56.25%" }}
-                >
+                  style={{ paddingBottom: "56.25%" }}>
                   <iframe
                     src="https://fast.wistia.net/embed/iframe/uggxez8r8s?videoFoam=true&dnt=true"
                     title="Wistia Video"
@@ -185,7 +232,13 @@ export default function HomePage() {
       </section>
 
       {/* Trust Metrics */}
-  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-16 bg-card" data-fade-id="trust-metrics">
+      <FadeIn
+        as="section"
+        y={80}
+        amount={0.1}
+        enterViewportOffset={0.15}
+        className="py-16 bg-card"
+        data-fade-id="trust-metrics">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
@@ -197,37 +250,49 @@ export default function HomePage() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <Users className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">1500+ Students</h3>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
+                1500+ Students
+              </h3>
             </div>
             <div>
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <TrendingUp className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">High Success Rate</h3>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
+                High Success Rate
+              </h3>
             </div>
             <div>
               <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
                 <DollarSign className="h-8 w-8 text-accent-foreground" />
               </div>
-              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">Millions in Profits</h3>
+              <h3 className="font-serif font-bold text-2xl text-card-foreground mb-2">
+                Millions in Profits
+              </h3>
             </div>
           </div>
         </div>
       </FadeIn>
 
       {/* What You'll Get Section */}
-  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20" data-fade-id="what-you-get">
+      <FadeIn
+        as="section"
+        y={80}
+        amount={0.1}
+        enterViewportOffset={0.15}
+        className="py-20"
+        data-fade-id="what-you-get">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-4">
               What You'll Get With Freedom Team Trading
             </h2>
             <p className="text-lg max-w-3xl mx-auto text-white">
-              Stop guessing. Stop dreaming. In just 5 weeks, you'll learn a
-              step-by-step, step-by-step trading approach that works on your
-              account without losing all your money. Whether you're brand new to
-              trading or have been trading for years, this is the system you
-              need.
+              Stop guessing. Stop stressing. In just 8 weeks, you’ll learn a
+              backtested, step-by-step trading approach that helps you grow your
+              account without living at your screen. Whether you’re brand new or
+              have been trading for years, our system gives you the tools,
+              strategies, and mentorship you need to trade with confidence.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -237,8 +302,8 @@ export default function HomePage() {
                   <Target className="h-8 w-8 text-accent-foreground" />
                 </div>
                 <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Learn a 3 phase trading system that works in any trading
-                  situation
+                  Learn a 3-phase trading system that works in any market
+                  condition
                 </h3>
               </CardContent>
             </Card>
@@ -248,8 +313,8 @@ export default function HomePage() {
                   <BarChart3 className="h-8 w-8 text-accent-foreground" />
                 </div>
                 <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Use our proven "scale and compound" method to grow your
-                  account
+                  Use our proven “scale and compound” method to grow small
+                  accounts
                 </h3>
               </CardContent>
             </Card>
@@ -259,7 +324,7 @@ export default function HomePage() {
                   <DollarSign className="h-8 w-8 text-accent-foreground" />
                 </div>
                 <h3 className="font-serif font-bold text-xl text-card-foreground mb-4">
-                  Trade with a "casino-like" statistical edge instead of emotion
+                  Trade with a “casino-like” statistical edge instead of emotion
                 </h3>
               </CardContent>
             </Card>
@@ -278,8 +343,7 @@ export default function HomePage() {
             <Button
               onClick={openModal}
               size="lg"
-              className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug"
-            >
+              className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug">
               Schedule Your Free Strategy Session Now
             </Button>
           </div>
@@ -287,14 +351,20 @@ export default function HomePage() {
       </FadeIn>
 
       {/* Real Traders, Real Results */}
-  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20 bg-card" data-fade-id="real-traders">
+      <FadeIn
+        as="section"
+        y={80}
+        amount={0.1}
+        enterViewportOffset={0.15}
+        className="py-20 bg-card"
+        data-fade-id="real-traders">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
-              Real Traders, Real Results
+              Real Traders. Real Results.
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Hear from Freedom Team members who have transformed their trading
+              Hear from Freedom Team students who have transformed their trading
               and their lives.
             </p>
           </div>
@@ -302,23 +372,30 @@ export default function HomePage() {
             <Card className="bg-background border-border h-full">
               <CardContent className="p-6">
                 <div className="mb-4">
-                  <LazyVimeo id="814064049" hash="2b29cbe014" title="Dylan - From Frustrated to Profitable" />
+                  <LazyVimeo
+                    id="814064049"
+                    hash="2b29cbe014"
+                    title="Dylan - From Frustrated to Profitable"
+                  />
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
                   Dylan - From Frustrated to Profitable
                 </h3>
                 <p className="text-sm text-white">
-                  "I've finally been seeing consistent gains. The strategy is
-                  simple and works. Risk management is key and I've learned to
-                  control my emotions when making trading decisions. I've made
-                  so much progress in my trading."
+                  "I've finally been seeing consistent gains... the strategy is
+                  simple and stress-free. Joining was the best decision I've
+                  made for my trading."
                 </p>
               </CardContent>
             </Card>
             <Card className="bg-background border-border h-full">
               <CardContent className="p-6">
                 <div className="mb-4">
-                  <LazyVimeo id="813876327" hash="25d5841986" title="How Will Gained His Time Back With The Freedom Team" />
+                  <LazyVimeo
+                    id="813876327"
+                    hash="25d5841986"
+                    title="How Will Gained His Time Back With The Freedom Team"
+                  />
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
                   How Will Gained His Time Back With The Freedom Team
@@ -337,16 +414,20 @@ export default function HomePage() {
             <Card className="bg-background border-border h-full">
               <CardContent className="p-6">
                 <div className="mb-4">
-                  <LazyVimeo id="813876256" hash="77751d044c" title="How Eduardo Went From 4 Blown Accounts to Profitable Trader" />
+                  <LazyVimeo
+                    id="813876256"
+                    hash="77751d044c"
+                    title="How Eduardo Went From 4 Blown Accounts to Profitable Trader"
+                  />
                 </div>
                 <h3 className="font-serif font-bold text-lg text-foreground mb-2">
                   How Eduardo Went From 4 Blown Accounts to Profitable Trader
                 </h3>
                 <p className="text-sm text-white">
                   “After taking your course I have more logical stops… so now
-                  it’s much more probable for me to make money. Now when I trade,
-                  I’m a lot more calm about it…. If you follow through the
-                  whole course, you’re gonna make it. “
+                  it’s much more probable for me to make money. Now when I
+                  trade, I’m a lot more calm about it…. If you follow through
+                  the whole course, you’re gonna make it. “
                 </p>
               </CardContent>
             </Card>
@@ -355,7 +436,13 @@ export default function HomePage() {
       </FadeIn>
 
       {/* Trading Simplified */}
-  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20" data-fade-id="trading-simplified">
+      <FadeIn
+        as="section"
+        y={80}
+        amount={0.1}
+        enterViewportOffset={0.15}
+        className="py-20"
+        data-fade-id="trading-simplified">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">
@@ -413,7 +500,13 @@ export default function HomePage() {
       </FadeIn>
 
       {/* New CTA Section with Bonus eBook Offer */}
-  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20 bg-card" data-fade-id="cta-section">
+      <FadeIn
+        as="section"
+        y={80}
+        amount={0.1}
+        enterViewportOffset={0.15}
+        className="py-20 bg-card"
+        data-fade-id="cta-section">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 flex-wrap">
             <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center mb-8 md:mb-0">
@@ -444,8 +537,7 @@ export default function HomePage() {
                 <Button
                   onClick={openModal}
                   size="lg"
-                  className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug"
-                >
+                  className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug">
                   Schedule Your Free Strategy Session Now
                 </Button>
               </div>
@@ -456,19 +548,19 @@ export default function HomePage() {
 
       {/* Final CTA */}
       <section className="py-20 bg-accent">
-        <FadeIn className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-serif font-black text-3xl sm:text-4xl text-accent-foreground mb-6">
-            Ready to Transform Your Trading?
+        <FadeIn className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-black">
+          <h2 className="font-serif font-black text-3xl sm:text-4xl mb-6">
+            It’s Time to Trade with Confidence
           </h2>
-          <p className="text-lg text-accent-foreground/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of successful traders who have mastered our proven
-            3-step system. Book your free strategy session today.
+          <p className="text-lg font-semibold mb-8 max-w-2xl mx-auto">
+            Imagine knowing, without a doubt, that every trade you take is
+            backed by a system proven to be profitable. That’s what we teach.
+            That’s the Freedom Team difference.
           </p>
           <Button
             onClick={openModal}
             size="lg"
-            className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4"
-          >
+            className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4">
             Book Your Free 1-on-1 Strategy Session
           </Button>
         </FadeIn>
@@ -496,15 +588,13 @@ export default function HomePage() {
               <a
                 href="https://freedomteamtrade.com/privacy-policy1722628932740"
                 target="_blank"
-                className="hover:text-card-foreground transition-colors"
-              >
+                className="hover:text-card-foreground transition-colors">
                 Privacy Policy
               </a>
               <a
                 href="https://freedomteamtrade.com/terms-of-service1722632412284"
                 target="_blank"
-                className="hover:text-card-foreground transition-colors"
-              >
+                className="hover:text-card-foreground transition-colors">
                 Terms & Conditions
               </a>
             </div>
@@ -571,25 +661,28 @@ export default function HomePage() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-                >
-                  {submitting ? 'Submitting...' : 'Schedule My Free Session'}
+                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+                  {submitting ? "Submitting..." : "Schedule My Free Session"}
                 </Button>
               </form>
             </>
           )}
           {success && (
-            <div className="flex flex-col items-center text-center space-y-6 py-4" aria-live="assertive">
+            <div
+              className="flex flex-col items-center text-center space-y-6 py-4"
+              aria-live="assertive">
               <div className="space-y-2">
-                <h3 className="text-xl font-serif font-bold text-foreground">Thank you!</h3>
-                <p className="text-sm text-muted-foreground max-w-sm">
-                  The next page is where you'll book your 1-on-1 session with us. Redirecting now...
+                <h3 className="text-xl font-serif font-bold text-foreground">
+                  Thank you!
+                </h3>
+                <p className="text-sm text-white max-w-sm">
+                  The next page is where you'll book your 1-on-1 session with
+                  us. Redirecting now...
                 </p>
               </div>
               <Button
                 onClick={() => (window.location.href = REDIRECT_URL)}
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-              >
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
                 Continue Now
               </Button>
             </div>

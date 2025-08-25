@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSql } from '@/lib/db';
 
+// In-memory fallback storage when no database connection string is configured.
+// This prevents 500 errors during local development or preview deploys without env vars.
+// NOTE: Data stored here is ephemeral and WILL NOT persist across server restarts or cold starts.
+const memoryLeads: { first_name: string; last_name: string; email: string; created_at: string }[] = [];
+let warnedNoDb = false;
+
 // POST /api/leads  { firstName, lastName, email }
 export async function POST(req: NextRequest) {
   try {
@@ -11,36 +17,58 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const sql = getSql();
+    // Try to obtain SQL client; if unavailable due to missing env vars, fall back to memory.
+    let sql: ReturnType<typeof getSql> | null = null;
+    try {
+      sql = getSql();
+    } catch (e: any) {
+      if (!warnedNoDb && /No database connection string/i.test(String(e?.message))) {
+        console.warn('[leads][POST] No DB connection string found. Falling back to in-memory storage only. Set DATABASE_URL (or POSTGRES_URL / NEON_DATABASE_URL) to enable persistence.');
+        warnedNoDb = true;
+      } else {
+        console.error('[leads][POST] getSql error', e);
+      }
+    }
 
-    await sql`CREATE TABLE IF NOT EXISTS leads (
-      id SERIAL PRIMARY KEY,
-      first_name TEXT NOT NULL,
-      last_name TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    );`;
+    if (sql) {
+      await sql`CREATE TABLE IF NOT EXISTS leads (
+        id SERIAL PRIMARY KEY,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );`;
+    }
 
     // Attempt insert and capture if a row was inserted
     let inserted = false;
-    try {
-      const result: any = await sql`INSERT INTO leads (first_name, last_name, email)
-                              VALUES (${firstName}, ${lastName}, ${email})
-                              ON CONFLICT (email) DO NOTHING
-                              RETURNING id;`;
-      if (Array.isArray(result)) {
-        inserted = result.length > 0;
-      } else if (result && Array.isArray(result[0])) {
-        inserted = result[0].length > 0;
-      } else if (result && typeof result.rowCount === 'number') {
-        inserted = result.rowCount > 0;
+    if (sql) {
+      try {
+        const result: any = await sql`INSERT INTO leads (first_name, last_name, email)
+                                VALUES (${firstName}, ${lastName}, ${email})
+                                ON CONFLICT (email) DO NOTHING
+                                RETURNING id;`;
+        if (Array.isArray(result)) {
+          inserted = result.length > 0;
+        } else if (result && Array.isArray(result[0])) {
+          inserted = result[0].length > 0;
+        } else if (result && typeof result.rowCount === 'number') {
+          inserted = result.rowCount > 0;
+        }
+      } catch (e) {
+        console.error('Insert error', e);
+        return NextResponse.json({ error: 'Insert failed' }, { status: 500 });
       }
-    } catch (e) {
-      console.error('Insert error', e);
-      return NextResponse.json({ error: 'Insert failed' }, { status: 500 });
+    } else {
+      // Memory fallback logic: de-dupe on email
+      const exists = memoryLeads.some(l => l.email.toLowerCase() === email.toLowerCase());
+      if (!exists) {
+        memoryLeads.push({ first_name: firstName, last_name: lastName, email, created_at: new Date().toISOString() });
+        inserted = true;
+      }
     }
 
-    return NextResponse.json({ success: true, inserted });
+    return NextResponse.json({ success: true, inserted, persistence: sql ? 'database' : 'memory' });
   } catch (err: any) {
     console.error('[leads][POST] error', err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -56,9 +84,22 @@ export async function GET(req: NextRequest) {
     if (!expected || token !== expected) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const sql = getSql();
-    const rows = await sql`SELECT id, first_name, last_name, email, created_at FROM leads ORDER BY created_at DESC LIMIT 25;`;
-    return NextResponse.json({ rows });
+    let sql: ReturnType<typeof getSql> | null = null;
+    try {
+      sql = getSql();
+    } catch (e: any) {
+      if (!warnedNoDb && /No database connection string/i.test(String(e?.message))) {
+        console.warn('[leads][GET] No DB connection string found. Using in-memory data.');
+        warnedNoDb = true;
+      }
+    }
+    if (sql) {
+      const rows = await sql`SELECT id, first_name, last_name, email, created_at FROM leads ORDER BY created_at DESC LIMIT 25;`;
+      return NextResponse.json({ rows, persistence: 'database' });
+    }
+    // Memory fallback shape normalization to mimic DB rows
+    const rows = memoryLeads.map((l, idx) => ({ id: idx + 1, ...l }));
+    return NextResponse.json({ rows, persistence: 'memory' });
   } catch (err: any) {
     console.error('[leads][GET] error', err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
