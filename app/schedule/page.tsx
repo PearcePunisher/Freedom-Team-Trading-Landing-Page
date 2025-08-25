@@ -109,7 +109,7 @@ export default function SchedulePage() {
         <div className="w-full">
           {/* We give the iframe a generous min-height so it pushes the footer down; adjust as needed */}
           <iframe
-            src="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session?sl=result&embedType=undefined&referrerUrl=https%3A%2F%2Ffreedomteamtrade.com%2F3-schedule-page1682423104339%3Fsl%3Dresult"
+            src="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session?referrerUrl=start.freedomteamtrade.com"
             title="Strategy Session"
             className="w-full min-h-[600px] border-0"
             frameBorder={0}
