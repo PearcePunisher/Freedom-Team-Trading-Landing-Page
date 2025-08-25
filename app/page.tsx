@@ -115,6 +115,8 @@ export default function HomePage() {
                 height={151}
                 className="h-10 w-auto"
                 priority
+                sizes="106px" /* Actual rendered width (h-10 => 40px tall, width ~106px) */
+                decoding="async"
               />
             </div>
             <Button
@@ -415,11 +417,16 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 flex-wrap">
             <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center mb-8 md:mb-0">
-              <img
+              <Image
                 src="/phone-background.webp"
                 alt="Options Scanner Blueprint Mobile Mockup"
+                width={601}
+                height={1197}
                 className="w-64 md:w-56 lg:w-64 h-auto"
-                style={{ maxWidth: "100%" }}
+                sizes="(max-width: 768px) 224px, 256px" /* Matches w-56 (224px) on md and w-64 (256px) default */
+                decoding="async"
+                loading="lazy"
+                fetchPriority="low"
               />
             </div>
             <div className="flex-1 flex flex-col justify-center text-center md:text-left">
@@ -479,6 +486,9 @@ export default function HomePage() {
                 height={400}
                 className="h-20 w-auto"
                 loading="lazy"
+                sizes="80px" /* h-20 => 80px tall, width auto ~80px */
+                decoding="async"
+                fetchPriority="low"
               />
             </div>
 

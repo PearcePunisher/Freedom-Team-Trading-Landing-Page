@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import "tailwindcss"; /* Core Tailwind */
+/* Removed @import "tw-animate-css" to reduce render‑blocking CSS size; dialog + fade utilities rely on tailwindcss-animate plugin, not this package. */
 
 @custom-variant dark (&:is(.dark *));
 
