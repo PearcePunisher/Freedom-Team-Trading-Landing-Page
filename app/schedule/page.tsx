@@ -94,26 +94,23 @@ export default function SchedulePage() {
             amount={0.1}
             enterViewportOffset={0}
             className="mt-4 text-center text-sm md:text-base text-white">
-            Page not loading?{' '}
+            Page not loading?{" "}
             <a
               href="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:underline font-semibold underline"
-            >
+              className="text-accent hover:underline font-semibold underline">
               Click Here
             </a>
           </FadeIn>
-          
         </div>
         <div className="w-full">
           {/* We give the iframe a generous min-height so it pushes the footer down; adjust as needed */}
           <iframe
-            src="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session?referrerUrl=start.freedomteamtrade.com"
+            src="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session?sl=result&referrerUrl=https%3A%2F%2Fstart.freedomteamtrade.com"
             title="Strategy Session"
             className="w-full min-h-[600px] border-0"
-            frameBorder={0}
-            sandbox="allow-scripts allow-downloads allow-same-origin allow-popups allow-forms allow-top-navigation allow-popups-to-escape-sandbox"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
             allowFullScreen
           />
         </div>
