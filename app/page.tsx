@@ -182,7 +182,7 @@ export default function HomePage() {
       </section>
 
       {/* Trust Metrics */}
-      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.7} className="py-16 bg-card" data-fade-id="trust-metrics">
+  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-16 bg-card" data-fade-id="trust-metrics">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
@@ -213,7 +213,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* What You'll Get Section */}
-      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.75} className="py-20" data-fade-id="what-you-get">
+  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20" data-fade-id="what-you-get">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-4">
@@ -284,7 +284,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* Real Traders, Real Results */}
-      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.8} className="py-20 bg-card" data-fade-id="real-traders">
+  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20 bg-card" data-fade-id="real-traders">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-card-foreground mb-4">
@@ -379,7 +379,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* Trading Simplified */}
-      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.8} className="py-20" data-fade-id="trading-simplified">
+  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20" data-fade-id="trading-simplified">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-serif font-black text-3xl sm:text-4xl text-foreground mb-8">
@@ -437,7 +437,7 @@ export default function HomePage() {
       </FadeIn>
 
       {/* New CTA Section with Bonus eBook Offer */}
-      <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.85} className="py-20 bg-card" data-fade-id="cta-section">
+  <FadeIn as="section" y={80} amount={0.1} enterViewportOffset={0.15} className="py-20 bg-card" data-fade-id="cta-section">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 flex-wrap">
             <div className="flex-shrink-0 w-full md:w-1/3 flex justify-center mb-8 md:mb-0">
