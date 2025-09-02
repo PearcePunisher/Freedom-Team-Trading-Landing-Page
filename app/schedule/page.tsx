@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FadeIn from "@/components/fade-in";
+import IClosedWidget from "@/components/iclosed-widget";
 
 // Metadata moved to separate server file metadata.ts to satisfy Next.js constraints for client components.
 
@@ -105,14 +106,11 @@ export default function SchedulePage() {
           </FadeIn>
         </div>
         <div className="w-full">
-          {/* We give the iframe a generous min-height so it pushes the footer down; adjust as needed */}
-          <iframe
-            src="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session?sl=result&referrerUrl=https%3A%2F%2Fstart.freedomteamtrade.com"
-            title="Strategy Session"
-            className="w-full min-h-[600px] border-0"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation"
-            allowFullScreen
-          />
+          {/* Replace iframe with client-side iClosed widget for better integration and lazy loading */}
+          <div className="w-full min-h-[600px] border-0">
+            {/* @ts-ignore */}
+            <IClosedWidget />
+          </div>
         </div>
       </main>
 
