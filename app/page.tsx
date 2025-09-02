@@ -38,6 +38,10 @@ export default function HomePage() {
   const redirectTimeoutRef = React.useRef<number | null>(null);
   const successAtRef = React.useRef<number | null>(null);
   const redirectedRef = React.useRef(false);
+  // Keep the raw search string so we can preserve query params across redirects
+  const urlSearchRef = React.useRef<string>("");
+  // Parsed URL params to include in the lead payload
+  const [urlParams, setUrlParams] = useState<Record<string, string> | null>(null);
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +60,8 @@ export default function HomePage() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+  // Include any captured URL params so analytics can ingest them server-side
+  body: JSON.stringify({ ...formData, urlParams: urlParams || {} }),
       });
       console.log('[leads][submit] Response status', res.status);
       if (!res.ok) {
@@ -88,11 +93,18 @@ export default function HomePage() {
     redirectedRef.current = true;
     console.log('[leads][redirect] Navigating to', REDIRECT_URL);
     try {
-      router.push(REDIRECT_URL);
+      // Preserve original URL query string if available
+      const dest = buildRedirectUrl();
+      router.push(dest);
     } catch (e) {
       console.warn('[leads][redirect] router.push failed, falling back to window.location', e);
-      window.location.href = REDIRECT_URL;
+      window.location.href = buildRedirectUrl();
     }
+  }
+
+  function buildRedirectUrl() {
+    const search = urlSearchRef.current || (typeof window !== 'undefined' ? window.location.search : '');
+    return search && search.length > 0 ? `${REDIRECT_URL}${search}` : REDIRECT_URL;
   }
 
   function scheduleRedirect() {
@@ -122,6 +134,29 @@ export default function HomePage() {
     }
     setSuccess(false);
     setSubmitting(false);
+    // Capture current URL params once when the modal opens so we can submit and preserve them
+    try {
+      if (typeof window !== 'undefined') {
+        const search = window.location.search || '';
+        urlSearchRef.current = search;
+        if (search && search.length > 1) {
+          const sp = new URLSearchParams(search);
+          const parsed: Record<string, string> = {};
+          sp.forEach((value, key) => {
+            parsed[key] = value;
+          });
+          setUrlParams(parsed);
+        } else {
+          setUrlParams(null);
+        }
+      }
+    } catch (err) {
+      // Non-fatal: proceed without params
+      console.warn('[leads][openModal] Failed to capture URL params', err);
+      urlSearchRef.current = '';
+      setUrlParams(null);
+    }
+
     setIsModalOpen(true);
   };
 

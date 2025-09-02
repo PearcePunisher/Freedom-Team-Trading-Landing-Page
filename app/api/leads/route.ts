@@ -4,7 +4,17 @@ import { getSql } from '@/lib/db';
 // In-memory fallback storage when no database connection string is configured.
 // This prevents 500 errors during local development or preview deploys without env vars.
 // NOTE: Data stored here is ephemeral and WILL NOT persist across server restarts or cold starts.
-const memoryLeads: { first_name: string; last_name: string; email: string; created_at: string }[] = [];
+const memoryLeads: {
+  first_name: string;
+  last_name: string;
+  email: string;
+  created_at: string;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+}[] = [];
 let warnedNoDb = false;
 
 // POST /api/leads  { firstName, lastName, email }
@@ -36,16 +46,29 @@ export async function POST(req: NextRequest) {
         first_name TEXT NOT NULL,
         last_name TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
+        utm_source TEXT,
+        utm_medium TEXT,
+        utm_campaign TEXT,
+        utm_term TEXT,
+        utm_content TEXT,
         created_at TIMESTAMPTZ DEFAULT NOW()
       );`;
     }
+
+    // Extract any UTM params provided by the client (urlParams object)
+    const urlParams = (body && body.urlParams) || {};
+    const utm_source = urlParams.utm_source ?? null;
+    const utm_medium = urlParams.utm_medium ?? null;
+    const utm_campaign = urlParams.utm_campaign ?? null;
+    const utm_term = urlParams.utm_term ?? null;
+    const utm_content = urlParams.utm_content ?? null;
 
     // Attempt insert and capture if a row was inserted
     let inserted = false;
     if (sql) {
       try {
-        const result: any = await sql`INSERT INTO leads (first_name, last_name, email)
-                                VALUES (${firstName}, ${lastName}, ${email})
+        const result: any = await sql`INSERT INTO leads (first_name, last_name, email, utm_source, utm_medium, utm_campaign, utm_term, utm_content)
+                                VALUES (${firstName}, ${lastName}, ${email}, ${utm_source}, ${utm_medium}, ${utm_campaign}, ${utm_term}, ${utm_content})
                                 ON CONFLICT (email) DO NOTHING
                                 RETURNING id;`;
         if (Array.isArray(result)) {
@@ -63,7 +86,17 @@ export async function POST(req: NextRequest) {
       // Memory fallback logic: de-dupe on email
       const exists = memoryLeads.some(l => l.email.toLowerCase() === email.toLowerCase());
       if (!exists) {
-        memoryLeads.push({ first_name: firstName, last_name: lastName, email, created_at: new Date().toISOString() });
+        memoryLeads.push({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          created_at: new Date().toISOString(),
+          utm_source,
+          utm_medium,
+          utm_campaign,
+          utm_term,
+          utm_content,
+        });
         inserted = true;
       }
     }
