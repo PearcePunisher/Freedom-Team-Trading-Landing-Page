@@ -164,6 +164,7 @@ export default function HomePage() {
             </div>
             <Button
               onClick={openModal}
+              id="nav-button"
               className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
               Book Your Free 1-on-1 Strategy Session
             </Button>
@@ -198,6 +199,7 @@ export default function HomePage() {
                 <Button
                   onClick={openModal}
                   size="lg"
+                  id="hero-button"
                   className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
                   Book Your Free 1-on-1 Strategy Session
                 </Button>
@@ -343,6 +345,7 @@ export default function HomePage() {
             <Button
               onClick={openModal}
               size="lg"
+              id="what-you-get-button"
               className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug">
               Schedule Your Free Strategy Session Now
             </Button>
@@ -537,6 +540,7 @@ export default function HomePage() {
                 <Button
                   onClick={openModal}
                   size="lg"
+                  id="ebook-button"
                   className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug">
                   Schedule Your Free Strategy Session Now
                 </Button>
@@ -560,6 +564,7 @@ export default function HomePage() {
           <Button
             onClick={openModal}
             size="lg"
+            id="final-cta-button"
             className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4">
             Book Your Free 1-on-1 Strategy Session
           </Button>
@@ -661,6 +666,7 @@ export default function HomePage() {
                 <Button
                   type="submit"
                   disabled={submitting}
+                  id="form-submit-button"
                   className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
                   {submitting ? "Submitting..." : "Schedule My Free Session"}
                 </Button>
@@ -682,6 +688,7 @@ export default function HomePage() {
               </div>
               <Button
                 onClick={() => (window.location.href = REDIRECT_URL)}
+                id="force-redirect-button"
                 className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
                 Continue Now
               </Button>
