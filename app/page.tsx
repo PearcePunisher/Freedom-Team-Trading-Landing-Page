@@ -735,12 +735,6 @@ export default function HomePage() {
                 </p>
                 {alterRedirect()}
               </div>
-              <Button
-                onClick={() => (window.location.href = REDIRECT_URL)}
-                id="force-redirect-button"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
-                Continue Now
-              </Button>
             </div>
           )}
         </DialogContent>
