@@ -53,6 +53,13 @@ export async function POST(req: NextRequest) {
         utm_content TEXT,
         created_at TIMESTAMPTZ DEFAULT NOW()
       );`;
+  // Ensure UTM columns exist on older tables that may have been created without them.
+  // ALTER TABLE ... ADD COLUMN IF NOT EXISTS is idempotent and safe to run at runtime.
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS utm_source TEXT;`;
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS utm_medium TEXT;`;
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS utm_campaign TEXT;`;
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS utm_term TEXT;`;
+  await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS utm_content TEXT;`;
     }
 
     // Extract any UTM params provided by the client (urlParams object)
@@ -127,7 +134,7 @@ export async function GET(req: NextRequest) {
       }
     }
     if (sql) {
-      const rows = await sql`SELECT id, first_name, last_name, email, created_at FROM leads ORDER BY created_at DESC LIMIT 25;`;
+      const rows = await sql`SELECT id, first_name, last_name, email, utm_source, utm_medium, utm_campaign, utm_term, utm_content, created_at FROM leads ORDER BY created_at DESC LIMIT 25;`;
       return NextResponse.json({ rows, persistence: 'database' });
     }
     // Memory fallback shape normalization to mimic DB rows
