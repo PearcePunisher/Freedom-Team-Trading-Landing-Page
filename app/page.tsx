@@ -189,7 +189,7 @@ export default function HomePage() {
       if(split_v.length>1){
         params = "?" + split_v[1];
       }
-      REDIRECT_URL = REDIRECT_URL + params;
+   //   REDIRECT_URL = REDIRECT_URL + params;
       }
 
   return (
