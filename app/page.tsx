@@ -184,11 +184,11 @@ export default function HomePage() {
 
     function alterRedirect(): any{
       console.log(window.location.href);
-      var params = "";
-      var split_v = window.location.href.split("?");
-      if(split_v.length>1){
-        params = "?" + split_v[1];
-      }
+   //   var params = "";
+   //   var split_v = window.location.href.split("?");
+  //    if(split_v.length>1){
+  //      params = "?" + split_v[1];
+   //   }
    //   REDIRECT_URL = REDIRECT_URL + params;
       }
 
