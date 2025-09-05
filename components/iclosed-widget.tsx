@@ -72,6 +72,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
   height = 620,
 }) => {
   var params = "";
+  var final_url = "";
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -102,6 +103,8 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     console.log(SCRIPT_SRC);
     console.log("URL: " + url);
     console.log("PArams: " + params);
+    console.log("Ref: " + ref);
+    final_url = url + params;
     // intentionally do not call or mutate the provider's globals or attempt to re-init the script
   }, []);
 
@@ -109,7 +112,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     <div
       ref={ref}
       className="iclosed-widget"
-      data-url={url + params}
+      data-url={final_url}
       title={title}
       style={{ width: "100%", height }}
     />
