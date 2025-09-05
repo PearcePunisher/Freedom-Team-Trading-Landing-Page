@@ -107,7 +107,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     final_url = url + params;
     // intentionally do not call or mutate the provider's globals or attempt to re-init the script
   }, []);
-
+  console.log("FINAL URL :" + final_url);
   return (
     <div
       ref={ref}
