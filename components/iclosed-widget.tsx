@@ -23,8 +23,12 @@ export function generateIClosedWidget(): any{
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
+    if (typeof window === "undefined"){
+      console.log("Window is broken!~");
+      console.log(window);
+      return;
+    } 
+      
     // Debug logging moved inside the client-only effect to prevent server-side errors
     try {
       console.log("iclosed-widget init, location:", window.location.href);
