@@ -22,6 +22,7 @@ export function generateIClosedWidget(): any{
   height = 620,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
+  console.log("IN the test innit fam!");
   useEffect(() => {
     if (typeof window === "undefined"){
       console.log("Window is broken!~");
@@ -34,6 +35,7 @@ export function generateIClosedWidget(): any{
       console.log("iclosed-widget init, location:", window.location.href);
     } catch (e) {
       // ignore
+      console.log("nah fam it's an error innit!");
     }
 
     // If the vendor script is already present by src, do nothing — we will rely on it to initialize itself. TEST
