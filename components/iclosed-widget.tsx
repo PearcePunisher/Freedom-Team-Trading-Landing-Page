@@ -10,6 +10,50 @@ interface IClosedWidgetProps {
 
 const SCRIPT_SRC = "https://app.iclosed.io/assets/widget.js";
 
+
+export function generateIClosedWidget(urlp: String){
+  const IClosedWidget2: React.FC<IClosedWidgetProps> = ({
+  url = "https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session" + {urlp},
+  title = "Strategy Session",
+  height = 620,
+}) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Debug logging moved inside the client-only effect to prevent server-side errors
+    try {
+      console.log("iclosed-widget init, location:", window.location.href);
+    } catch (e) {
+      // ignore
+    }
+
+    // If the vendor script is already present by src, do nothing — we will rely on it to initialize itself. TEST
+    const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`);
+    if (!existing) {
+      const script = document.createElement("script");
+      script.src = SCRIPT_SRC;
+      script.async = true;
+      // Append to body so it doesn't block head parsing
+      document.body.appendChild(script);
+    }
+
+    // intentionally do not call or mutate the provider's globals or attempt to re-init the script
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="iclosed-widget"
+      data-url={url}
+      title={title}
+      style={{ width: "100%", height }}
+    />
+  );
+};
+}
+
+
 export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
   url = "https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session",
   title = "Strategy Session",
@@ -51,3 +95,4 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
 };
 
 export default IClosedWidget;
+
