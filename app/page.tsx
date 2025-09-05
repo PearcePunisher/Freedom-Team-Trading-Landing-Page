@@ -33,7 +33,8 @@ export default function HomePage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const REDIRECT_URL = "/schedule";
+
+  var REDIRECT_URL = "/schedule";
   const REDIRECT_DELAY_MS = 3000; // 3s delay so user sees confirmation
   const redirectTimeoutRef = React.useRef<number | null>(null);
   const successAtRef = React.useRef<number | null>(null);
@@ -43,6 +44,8 @@ export default function HomePage() {
   // Parsed URL params to include in the lead payload
   const [urlParams, setUrlParams] = useState<Record<string, string> | null>(null);
   const router = useRouter();
+
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -178,6 +181,16 @@ export default function HomePage() {
       }
     };
   }, [isModalOpen, success]);
+
+    function alterRedirect(): any{
+      console.log(window.location.href);
+      var params = "";
+      var split_v = window.location.href.split("?");
+      if(split_v.length>1){
+        params = "?" + split_v[1];
+      }
+      REDIRECT_URL = REDIRECT_URL + params;
+      }
 
   return (
     <div className="min-h-screen bg-background">
@@ -720,6 +733,7 @@ export default function HomePage() {
                   The next page is where you'll book your 1-on-1 session with
                   us. Redirecting now...
                 </p>
+                {alterRedirect()}
               </div>
               <Button
                 onClick={() => (window.location.href = REDIRECT_URL)}
