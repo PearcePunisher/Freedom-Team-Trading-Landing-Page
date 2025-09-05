@@ -71,6 +71,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
   title = "Strategy Session",
   height = 620,
 }) => {
+  var params = "";
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -79,6 +80,10 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     try {
       console.log("iclosed-widget init, location:", window.location.href);
       console.log("iclosed-widget init, location:", window.location.href.split("?")[1]);
+      var split_v = window.location.href.split("?");
+      if(split_v.length>1){
+        params = "?" + split_v[1];
+      }
     } catch (e) {
       // ignore
     }
@@ -92,7 +97,11 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
       // Append to body so it doesn't block head parsing
       document.body.appendChild(script);
     }
-
+    console.log("DATA DUMP");
+    console.log("Script SRC");
+    console.log(SCRIPT_SRC);
+    console.log("URL: " + url);
+    console.log("PArams: " + params);
     // intentionally do not call or mutate the provider's globals or attempt to re-init the script
   }, []);
 
@@ -100,7 +109,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     <div
       ref={ref}
       className="iclosed-widget"
-      data-url={url}
+      data-url={url + params}
       title={title}
       style={{ width: "100%", height }}
     />
