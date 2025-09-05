@@ -17,6 +17,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   console.log("test in the iframe");
+  console.log(window.location.href);
   useEffect(() => {
     if (typeof window === "undefined") return;
 
