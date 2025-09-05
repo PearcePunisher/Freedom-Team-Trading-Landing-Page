@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 interface IClosedWidgetProps {
   url?: string;
@@ -11,9 +12,12 @@ interface IClosedWidgetProps {
 const SCRIPT_SRC = "https://app.iclosed.io/assets/widget.js";
 
 
-export function generateIClosedWidget(urlp: String){
+export function generateIClosedWidget(){
+  const location = useRouter();
+  console.log("Location");
+  console.log(location);
   const IClosedWidget2: React.FC<IClosedWidgetProps> = ({
-  url = "https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session" + {urlp},
+  url = "https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session",
   title = "Strategy Session",
   height = 620,
 }) => {

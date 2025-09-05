@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
- import { useLocation } from 'react-router-dom';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FadeIn from "@/components/fade-in";
-import IClosedWidget from "@/components/iclosed-widget";
+import {IClosedWidget,generateIClosedWidget} from "@/components/iclosed-widget";
 
 // Metadata moved to separate server file metadata.ts to satisfy Next.js constraints for client components.
 
@@ -50,9 +49,6 @@ export default function SchedulePage() {
     },
     [exitIntentHasShown, exitIntentOpen]
   );
-
-  const url_params = useLocation().search;
-  console.log("TEST!!!! " + url_params);
 
   useEffect(() => {
     window.addEventListener("mouseout", handleMouseOut);
@@ -113,7 +109,7 @@ export default function SchedulePage() {
           {/* Replace iframe with client-side iClosed widget for better integration and lazy loading */}
           <div className="w-full min-h-[600px] border-0">
             {/* @ts-ignore */}
-            <IClosedWidget />
+            {generateIClosedWidget()}
           </div>
         </div>
       </main>
