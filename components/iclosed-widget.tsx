@@ -16,10 +16,15 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
   height = 620,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  console.log("test in the iframe");
-  console.log(window.location.href);
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Debug logging moved inside the client-only effect to prevent server-side errors
+    try {
+      console.log("iclosed-widget init, location:", window.location.href);
+    } catch (e) {
+      // ignore
+    }
 
     // If the vendor script is already present by src, do nothing — we will rely on it to initialize itself. TEST
     const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`);
