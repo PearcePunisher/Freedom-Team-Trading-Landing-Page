@@ -16,7 +16,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
   height = 620,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-
+  console.log("test in the iframe");
   useEffect(() => {
     if (typeof window === "undefined") return;
 
