@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+ import { useLocation } from 'react-router-dom';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,6 +50,9 @@ export default function SchedulePage() {
     },
     [exitIntentHasShown, exitIntentOpen]
   );
+
+  const url_params = useLocation().search;
+  console.log("TEST!!!! " + url_params);
 
   useEffect(() => {
     window.addEventListener("mouseout", handleMouseOut);
