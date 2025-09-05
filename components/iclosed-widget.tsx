@@ -20,7 +20,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // If the vendor script is already present by src, do nothing — we will rely on it to initialize itself.
+    // If the vendor script is already present by src, do nothing — we will rely on it to initialize itself. TEST
     const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`);
     if (!existing) {
       const script = document.createElement("script");
