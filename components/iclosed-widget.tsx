@@ -33,6 +33,7 @@ export function generateIClosedWidget(): any{
     // Debug logging moved inside the client-only effect to prevent server-side errors
     try {
       console.log("iclosed-widget init, location:", window.location.href);
+      console.log("iclosed-widget init, location:", window.location.href.split("?")[1]);
     } catch (e) {
       // ignore
       console.log("nah fam it's an error innit!");
@@ -77,6 +78,7 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     // Debug logging moved inside the client-only effect to prevent server-side errors
     try {
       console.log("iclosed-widget init, location:", window.location.href);
+      console.log("iclosed-widget init, location:", window.location.href.split("?")[1]);
     } catch (e) {
       // ignore
     }

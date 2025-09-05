@@ -110,9 +110,6 @@ export default function SchedulePage() {
           <div className="w-full min-h-[600px] border-0">
             {/* @ts-ignore */}
             <IClosedWidget />
-            <div id="iframe-wrapper" className="w-full min-h-[600px] border-0">
-              {generateIClosedWidget()}
-            </div>
           </div>
         </div>
       </main>
