@@ -73,6 +73,17 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
 }) => {
   var params = "";
   var final_url = "";
+     try {
+      console.log("iclosed-widget init, location:", window.location.href);
+      console.log("iclosed-widget init, location:", window.location.href.split("?")[1]);
+      var split_v = window.location.href.split("?");
+      if(split_v.length>1){
+        params = "?" + split_v[1];
+      }
+    } catch (e) {
+      // ignore
+    }
+  final_url = url + params;
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -104,7 +115,6 @@ export const IClosedWidget: React.FC<IClosedWidgetProps> = ({
     console.log("URL: " + url);
     console.log("PArams: " + params);
     console.log("Ref: " + ref);
-    final_url = url + params;
     // intentionally do not call or mutate the provider's globals or attempt to re-init the script
   }, []);
   console.log("FINAL URL :" + final_url);
