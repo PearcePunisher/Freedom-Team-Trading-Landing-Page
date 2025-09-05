@@ -35,7 +35,7 @@ export default function HomePage() {
   const [success, setSuccess] = useState(false);
 
   const REDIRECT_URL = "/schedule";
-  const REDIRECT_DELAY_MS = 1500; // 3s delay so user sees confirmation
+  const REDIRECT_DELAY_MS = 1000; // 3s delay so user sees confirmation
   const redirectTimeoutRef = React.useRef<number | null>(null);
   const successAtRef = React.useRef<number | null>(null);
   const redirectedRef = React.useRef(false);
