@@ -12,7 +12,7 @@ interface IClosedWidgetProps {
 const SCRIPT_SRC = "https://app.iclosed.io/assets/widget.js";
 
 
-export function generateIClosedWidget(){
+export function generateIClosedWidget(): any{
   const location = useRouter();
   console.log("Location");
   console.log(location);
@@ -55,6 +55,7 @@ export function generateIClosedWidget(){
     />
   );
 };
+return IClosedWidget2;
 }
 
 

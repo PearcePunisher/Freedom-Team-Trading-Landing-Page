@@ -109,7 +109,9 @@ export default function SchedulePage() {
           {/* Replace iframe with client-side iClosed widget for better integration and lazy loading */}
           <div className="w-full min-h-[600px] border-0">
             {/* @ts-ignore */}
-            {generateIClosedWidget()}
+            <div id="iframe-wrapper" className="w-full min-h-[600px] border-0">
+              {generateIClosedWidget()}
+            </div>
           </div>
         </div>
       </main>
