@@ -1,18 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+// Modal and form removed; all CTAs now navigate externally
 import {
   Users,
   TrendingUp,
@@ -25,172 +17,34 @@ import { FadeIn } from "@/components/fade-in";
 import { LazyVimeo } from "@/components/lazy-vimeo";
 
 export default function HomePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-  });
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  const REDIRECT_URL = "/schedule";
-  const REDIRECT_DELAY_MS = 1000; // 3s delay so user sees confirmation
-  const redirectTimeoutRef = React.useRef<number | null>(null);
-  const successAtRef = React.useRef<number | null>(null);
-  const redirectedRef = React.useRef(false);
-  // Keep the raw search string so we can preserve query params across redirects
-  const urlSearchRef = React.useRef<string>("");
-  // Parsed URL params to include in the lead payload
-  const [urlParams, setUrlParams] = useState<Record<string, string> | null>(null);
-  const router = useRouter();
-
-
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (submitting) return;
-    console.log('[leads][submit] Starting submission');
-    setSubmitting(true);
+  const EXTERNAL_URL = "https://app.iclosed.io/e/freedomteamtrading/freedom-strategy-session";
+  const goToScheduler = () => {
     try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-  // Include any captured URL params so analytics can ingest them server-side
-  body: JSON.stringify({ ...formData, urlParams: urlParams || {} }),
-      });
-      console.log('[leads][submit] Response status', res.status);
-      if (!res.ok) {
-        console.error("Failed to submit");
-        setSubmitting(false);
-        return;
+      const base = new URL(EXTERNAL_URL);
+      if (typeof window !== 'undefined') {
+        const incoming = new URLSearchParams(window.location.search);
+        incoming.forEach((v, k) => { if (v) base.searchParams.set(k, v); });
       }
-      const data = await res.json();
-      console.log('[leads][submit] Response JSON', data);
-      if (!data?.success) {
-        console.error("API did not return success");
-        setSubmitting(false);
-        return;
-      }
-      console.log('[leads][submit] Success true, scheduling redirect target', REDIRECT_URL);
-      setSuccess(true);
-      successAtRef.current = Date.now();
-      // Clear form for UX
-      setFormData({ firstName: "", lastName: "", email: "" });
-      scheduleRedirect();
-    } catch (err) {
-      console.error("Submission error", err);
-      setSubmitting(false);
+      window.location.href = base.toString();
+    } catch {
+      window.location.href = EXTERNAL_URL;
     }
   };
-
-  function performRedirect() {
-    if (redirectedRef.current) return;
-    redirectedRef.current = true;
-    console.log('[leads][redirect] Navigating to', REDIRECT_URL);
-    try {
-      // Preserve original URL query string if available
-      const dest = buildRedirectUrl();
-      router.push(dest);
-    } catch (e) {
-      console.warn('[leads][redirect] router.push failed, falling back to window.location', e);
-      window.location.href = buildRedirectUrl();
-    }
-  }
-
-  function buildRedirectUrl() {
-    const search = urlSearchRef.current || (typeof window !== 'undefined' ? window.location.search : '');
-    return search && search.length > 0 ? `${REDIRECT_URL}${search}` : REDIRECT_URL;
-  }
-
-  function scheduleRedirect() {
-    if (!successAtRef.current || redirectedRef.current) return;
-    const elapsed = Date.now() - successAtRef.current;
-    const remaining = REDIRECT_DELAY_MS - elapsed;
-    if (remaining <= 0) {
-      console.log('[leads][scheduleRedirect] Remaining <= 0, redirecting now');
-      performRedirect();
-      return;
-    }
-    if (redirectTimeoutRef.current) {
-      clearTimeout(redirectTimeoutRef.current);
-    }
-    console.log('[leads][scheduleRedirect] Scheduling redirect in', remaining, 'ms (elapsed', elapsed, 'ms)');
-    redirectTimeoutRef.current = window.setTimeout(() => {
-      console.log('[leads][redirectTimer] Timer fired after', remaining, 'ms');
-      performRedirect();
-    }, remaining);
-  }
 
   const openModal = () => {
-    // Reset any previous success state when reopening
-    if (redirectTimeoutRef.current) {
-      clearTimeout(redirectTimeoutRef.current);
-      redirectTimeoutRef.current = null;
-    }
-    setSuccess(false);
-    setSubmitting(false);
-    // Capture current URL params once when the modal opens so we can submit and preserve them
+    // Navigate directly to external scheduler in same tab, preserving current query params
     try {
+      const base = new URL(EXTERNAL_URL);
       if (typeof window !== 'undefined') {
-        const search = window.location.search || '';
-        urlSearchRef.current = search;
-        if (search && search.length > 1) {
-          const sp = new URLSearchParams(search);
-          const parsed: Record<string, string> = {};
-          sp.forEach((value, key) => {
-            parsed[key] = value;
-          });
-          setUrlParams(parsed);
-        } else {
-          setUrlParams(null);
-        }
+        const incoming = new URLSearchParams(window.location.search);
+        incoming.forEach((v, k) => { if (v) base.searchParams.set(k, v); });
       }
-    } catch (err) {
-      // Non-fatal: proceed without params
-      console.warn('[leads][openModal] Failed to capture URL params', err);
-      urlSearchRef.current = '';
-      setUrlParams(null);
+      window.location.href = base.toString();
+    } catch {
+      window.location.href = EXTERNAL_URL;
     }
-
-    setIsModalOpen(true);
   };
 
-  // If user manually closes dialog after success, still proceed with redirect if not already
-  React.useEffect(() => {
-    console.log('[leads][effect][modal|success] isModalOpen:', isModalOpen, 'success:', success, 'timer:', redirectTimeoutRef.current, 'redirected:', redirectedRef.current);
-    if (success) {
-      scheduleRedirect();
-      if (!isModalOpen) {
-        console.log('[leads][effect] Modal closed early, forcing immediate redirect');
-        performRedirect();
-      }
-    }
-    return () => {
-      if (redirectTimeoutRef.current) {
-        // Note: during Fast Refresh this cleanup will run; a subsequent re-mount will reschedule based on timestamp.
-        console.log('[leads][cleanup] Clearing redirect timer id', redirectTimeoutRef.current);
-        clearTimeout(redirectTimeoutRef.current);
-      }
-    };
-  }, [isModalOpen, success]);
-
-    function alterRedirect(): any{
-      console.log(window.location.href);
-   //   var params = "";
-   //   var split_v = window.location.href.split("?");
-  //    if(split_v.length>1){
-  //      params = "?" + split_v[1];
-   //   }
-   //   REDIRECT_URL = REDIRECT_URL + params;
-      }
 
   return (
     <div className="min-h-screen bg-background">
@@ -211,7 +65,7 @@ export default function HomePage() {
               />
             </div>
             <Button
-              onClick={openModal}
+              onClick={goToScheduler}
               id="nav-button"
               className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
               Book Your Free 1-on-1 Strategy Session
@@ -245,7 +99,7 @@ export default function HomePage() {
               </FadeIn>
               <FadeIn delay={0.4} amount={0.1} enterViewportOffset={0}>
                 <Button
-                  onClick={openModal}
+                  onClick={goToScheduler}
                   size="lg"
                   id="hero-button"
                   className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg px-8 py-4">
@@ -391,7 +245,7 @@ export default function HomePage() {
           </div>
           <div className="text-center">
             <Button
-              onClick={openModal}
+              onClick={goToScheduler}
               size="lg"
               id="what-you-get-button"
               className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug">
@@ -586,7 +440,7 @@ export default function HomePage() {
               </p>
               <div className="w-full flex justify-center md:justify-start">
                 <Button
-                  onClick={openModal}
+                  onClick={goToScheduler}
                   size="lg"
                   id="ebook-button"
                   className="w-full h-auto md:w-auto max-w-xs sm:max-w-sm bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base sm:text-lg px-6 py-4 whitespace-normal break-words text-center leading-snug">
@@ -610,7 +464,7 @@ export default function HomePage() {
             That’s the Freedom Team difference.
           </p>
           <Button
-            onClick={openModal}
+            onClick={goToScheduler}
             size="lg"
             id="final-cta-button"
             className="bg-background hover:bg-background/90 text-foreground font-semibold text-lg px-8 py-4">
@@ -662,83 +516,7 @@ export default function HomePage() {
         </div>
       </footer>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          {!success && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-serif font-bold text-center">
-                  Book Your Free Strategy Session
-                </DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    required
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    className="w-full"
-                    disabled={submitting}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className="w-full"
-                    disabled={submitting}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full"
-                    disabled={submitting}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  id="form-submit-button"
-                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
-                  {submitting ? "Submitting..." : "Schedule My Free Session"}
-                </Button>
-              </form>
-            </>
-          )}
-          {success && (
-            <div
-              className="flex flex-col items-center text-center space-y-6 py-4"
-              aria-live="assertive">
-              <div className="space-y-2">
-                <h3 className="text-xl font-serif font-bold text-foreground">
-                  Thank you!
-                </h3>
-                <p className="text-sm text-white max-w-sm">
-                  The next page is where you'll book your 1-on-1 session with
-                  us. Redirecting now...
-                </p>
-                {alterRedirect()}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+  {/* Modal removed */}
     </div>
   );
 }

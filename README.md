@@ -35,8 +35,9 @@ pnpm start
 
 ## Notes & important implementation details
 - The site uses client-side components for third-party embeds:
-	- `components/iclosed-widget.tsx` injects the iClosed inline widget script and renders the provider's container div (client-only). The script is appended exactly as provided by the vendor.
 	- `components/lazy-vimeo.tsx` defers Vimeo iframes until near the viewport and provides a click-to-load affordance.
+  
+Scheduling is handled off-site via direct CTA links (query params are preserved client-side).
 - Images are served via Next.js Image optimization. The `next.config.mjs` has been updated to include small `imageSizes` so the nav logo and phone mockup are not overserved at full resolution.
 - Animations are powered by a lightweight `FadeIn` component; accessibility (prefers-reduced-motion) is respected.
 
