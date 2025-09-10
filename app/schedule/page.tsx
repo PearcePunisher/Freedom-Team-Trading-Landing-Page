@@ -25,6 +25,28 @@ export default function SchedulePage() {
   const [exitIntentOpen, setExitIntentOpen] = useState(false);
   const [exitIntentHasShown, setExitIntentHasShown] = useState(false);
 
+  // Build external link that preserves current page's query params (e.g., UTM)
+  const SCHEDULER_BASE_URL =
+    "https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session";
+  const [externalSchedulerHref, setExternalSchedulerHref] = useState(
+    SCHEDULER_BASE_URL
+  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const search = window.location.search;
+      if (!search) return; // keep base URL
+      const u = new URL(SCHEDULER_BASE_URL);
+      const incoming = new URLSearchParams(search);
+      incoming.forEach((v, k) => {
+        if (v) u.searchParams.set(k, v);
+      });
+      setExternalSchedulerHref(u.toString());
+    } catch {
+      // no-op
+    }
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -97,10 +119,11 @@ export default function SchedulePage() {
             className="mt-4 text-center text-sm md:text-base text-white">
             Page not loading?{" "}
             <a
-              href="https://app.iclosed.io/e/freedomteamtrading/freedom-team-strategy-session"
+              href={externalSchedulerHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:underline font-semibold underline">
+              className="text-accent hover:underline font-semibold underline"
+              id="external-scheduler-link">
               Click Here
             </a>
           </FadeIn>
